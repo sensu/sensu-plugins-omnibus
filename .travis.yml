@@ -1,4 +1,4 @@
 sudo: required
 language: ruby
 rvm: 2.4.1
-script: travis_retry ./build.sh
+script: sudo ./build.sh
