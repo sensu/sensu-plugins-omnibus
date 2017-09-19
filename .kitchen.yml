@@ -1,49 +1,7 @@
-<%
-build_version = ENV["SENSU_VERSION"]
-build_iteration = ENV["BUILD_NUMBER"]
-aws_ssh_key_id = ENV["AWS_SSH_KEY_ID"]
-aws_ssh_key_path = ENV["AWS_SSH_KEY_PATH"]
-
-s3 = {}
-s3[:region] = ENV["AWS_REGION"]
-s3[:artifact_bucket] = ENV["AWS_S3_ARTIFACT_BUCKET"]
-s3[:cache_bucket] = ENV["AWS_S3_CACHE_BUCKET"]
-s3_enabled = !s3.any? { |k,v| v.nil? }
-
-if ENV.key?("AWS_ACCESS_KEY_ID") && ENV.key?("AWS_SECRET_ACCESS_KEY")
-  s3.merge!(:access_key_id => ENV["AWS_ACCESS_KEY_ID"])
-  s3.merge!(:secret_access_key => ENV["AWS_SECRET_ACCESS_KEY"])
-end
-
-unless build_version && build_iteration
-  raise "SENSU_VERSION and BUILD_NUMBER must be set"
-end
-%>
-
 driver:
-  name: ec2
-  instance_type: m3.medium
-  retryable_tries: 120
-  <% if ENV['AWS_IAM_PROFILE_NAME'] %>
-  iam_profile_name: <% ENV['AWS_IAM_PROFILE_NAME'] %>
-  <% end %>
-  <% unless aws_ssh_key_id.nil? %>
-  aws_ssh_key_id: <%= aws_ssh_key_id %>
-  <% end %>
-  tags:
-    "Name": "sensu-omnibus-artifact-builder <%= ENV['BUILD_PLATFORM'] %>"
-    "created-by": "test-kitchen"
-  <% if ENV['TRAVIS'] == 'true' %>
-    "travis-job-number": "<%= ENV['TRAVIS_JOB_NUMBER'].nil? ? 'unknown' : ENV['TRAVIS_JOB_NUMBER'] %>"
-  <% end %>
-  block_device_mappings:
-    - device_name: /dev/sda1
-      ebs:
-        delete_on_termination: true
-<% unless aws_ssh_key_path.nil? %>
-transport:
-  ssh_key: <%= aws_ssh_key_path %>
-<% end %>
+  name: vagrant
+  synced_folders:
+    - [".", "/opt/sensu-plugin-omnibus"]
 
 provisioner:
   name: chef_zero
@@ -52,14 +10,6 @@ provisioner:
     vagrant: true
     omnibus_sensu:
       publishers:
-        <% if s3_enabled %>
-        s3:
-          region: <%= s3[:region] %>
-          access_key_id: <%= s3[:access_key_id] %>
-          secret_access_key: <%= s3[:secret_access_key] %>
-          artifact_bucket: <%= s3[:artifact_bucket] %>
-          cache_bucket: <%= s3[:cache_bucket] %>
-        <% end %>
 
 platforms:
   - name: centos-7
@@ -69,110 +19,18 @@ platforms:
   - name: centos-6
     run_list: yum-epel::default
   - name: centos-6-i386
-    driver:
-      image_id: ami-4fbf2f7f
-      instance_type: m1.medium
-      block_device_mappings:
-        - device_name: /dev/sda
-          ebs:
-            delete_on_termination: true
     run_list: yum-epel::default
-  - name: centos-5
-    driver:
-      image_id: ami-f4b62094
-    run_list: yum-epel::default
-  - name: centos-5-i386
-    driver:
-      image_id: ami-e68b1d86
-      instance_type: m1.medium
-    run_list: yum-epel::default
-  - name: debian-9
-    run_list: apt::default
-    driver:
-      image_id: ami-52c7df2b
-      block_device_mappings:
-        - device_name: /dev/xvdb
-          ebs:
-            volume_size: 40
-            delete_on_termination: true
-  - name: debian-8
-    run_list: apt::default
-    driver:
-      block_device_mappings:
-        - device_name: /dev/xvda
-          ebs:
-            delete_on_termination: true
-  - name: debian-7
-    run_list: apt::default
-    driver:
-      block_device_mappings:
-        - device_name: /dev/xvda
-          ebs:
-            delete_on_termination: true
-  - name: debian-7-i386
-    driver:
-      instance_type: m1.medium
-      block_device_mappings:
-        - device_name: /dev/sda
-          ebs:
-            delete_on_termination: true
-    run_list: apt::default
-  - name: freebsd-11
-    driver:
-      user_data: "user-data/freebsd.sh"
-    run_list:
-      - omnibus_sensu::freebsd_portsnap
-      - freebsd::pkgng
-  - name: freebsd-10
-    driver:
-      user_data: "user-data/freebsd.sh"
-    run_list:
-      - omnibus_sensu::freebsd_portsnap
-      - freebsd::pkgng
   - name: ubuntu-16.04
     run_list: apt::default
   - name: ubuntu-16.04-i386
-    driver:
-      instance_type: m1.medium
     run_list: apt::default
   - name: ubuntu-14.04
     run_list: apt::default
   - name: ubuntu-14.04-i386
-    driver:
-      instance_type: m1.medium
     run_list: apt::default
-  - name: ubuntu-12.04
-    run_list: apt::default
-  - name: ubuntu-12.04-i386
-    driver:
-      instance_type: m1.medium
-    run_list: apt::default
-  - name: windows-2012-r2
-    driver:
-      image_id: ami-6f64f00f
-      instance_type: m3.xlarge
-    transport:
-      name: winrm
-      elevated: true
-    run_list: seven_zip::default
-  - name: windows-2012-r2-i386
-    driver:
-      image_id: ami-6f64f00f
-      instance_type: m3.xlarge
-    transport:
-      name: winrm
-      elevated: true
-    run_list: seven_zip::default
+
 suites:
   - name: default
     run_list:
     - build-essential::default
     - omnibus_sensu::default
-    attributes:
-      omnibus_sensu:
-        project_revision: "<%= ENV['PROJECT_REVISION'] || `git describe --all`.chomp %>"
-        build_version: "<%= build_version %>"
-        build_iteration: "<%= build_iteration %>"
-        gpg_passphrase: "<%= ENV['GPG_PASSPHRASE'] %>"
-        windows_target_version: "<%= ENV['WINDOWS_TARGET_VERSION'] %>"
-        project_revision: "release/1.0"

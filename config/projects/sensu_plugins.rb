@@ -1,20 +1,10 @@
 #
-# Copyright 2016 Heavy Water Operations, LLC.
+# Copyright 2017 Sensu, Inc.
 #
 # All Rights Reserved.
 #
 
-unless ENV.key?("SENSU_VERSION")
-  puts "SENSU_VERSION must be set"
-  exit 2
-end
-
-unless ENV.key?("BUILD_NUMBER")
-  puts "BUILD_NUMBER must be set"
-  exit 2
-end
-
-name "sensu"
+name "sensu-plugins-ruby"
 homepage "https://sensu.io"
 license "MIT"
 description "A monitoring framework that aims to be simple, malleable, and scalable."
@@ -35,11 +25,10 @@ else
   install_dir "#{default_root}/#{name}"
 end
 
-version = ENV["SENSU_VERSION"]
+version = "0.1.0"
 build_version version
-build_iteration ENV["BUILD_NUMBER"]
+build_iteration 3000
 
-override "sensu-gem", version: version
 override "ruby", version: "2.4.1"
 override "rubygems", version: "2.6.10"
 
@@ -48,21 +37,14 @@ package :deb do
   vendor vendor
 end
 
-gpg_passphrase = begin
-                   ::File.read('/home/omnibus/.gpg_passphrase')
-                 rescue => e
-                   puts "Failed to load gpg_passphrase: #{e}"
-                   nil
-                 end
-
 platform_version = ohai["platform_version"]
 
 package :rpm do
   category "Monitoring"
   vendor vendor
-  if Gem::Version.new(platform_version) >= Gem::Version.new(6)
-    signing_passphrase gpg_passphrase
-  end
+  #if Gem::Version.new(platform_version) >= Gem::Version.new(6)
+  #  signing_passphrase gpg_passphrase
+  #end
 end
 
 package :msi do
@@ -80,11 +62,9 @@ compress :dmg
 # Creates required build directories
 dependency "preparation"
 
-# package scripts erb templates
-dependency "package-scripts" unless windows?
-
-# sensu dependencies/components
-dependency "sensu-gem"
+# ruby & rubygem dependencies/components
+dependency "ruby"
+dependency "rubygems"
 
 # Make sure Windows gets a gem.bat
 dependency "shebang-cleanup" if windows?
@@ -94,8 +74,3 @@ dependency "version-manifest"
 
 exclude "**/.git"
 exclude "**/bundler/git"
-
-# Our package scripts are generated from .erb files,
-# so we will grab them from an excluded folder
-package_scripts_path "#{install_dir}/.package_util/package-scripts"
-exclude '.package_util'

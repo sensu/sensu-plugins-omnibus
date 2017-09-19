@@ -39,11 +39,15 @@ append_timestamp false
 # Enable S3 asset caching
 # ------------------------------
 use_s3_caching false
+s3_access_key  ""
+s3_secret_key  ""
+s3_bucket      ""
+s3_region      ""
 
 # Enable S3 asset caching
 # ------------------------------
-publish_s3_access_key ENV["AWS_ACCESS_KEY_ID"]
-publish_s3_secret_key ENV["AWS_SECRET_ACCESS_KEY"]
+publish_s3_access_key ""
+publish_s3_secret_key ""
 
 # Customize compiler bits
 # ------------------------------
