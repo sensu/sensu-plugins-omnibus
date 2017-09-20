@@ -72,3 +72,5 @@ redacted_environment_variables [
   "AWS_SECRET_ACCESS_KEY",
   "GPG_PASSPHRASE",
 ]
+
+Ohai["kernel"]["machine"] = "i386"
