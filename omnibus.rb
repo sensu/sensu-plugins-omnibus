@@ -73,4 +73,4 @@ redacted_environment_variables [
   "GPG_PASSPHRASE",
 ]
 
-Ohai["kernel"]["machine"] = "i386"
+ohai["kernel"]["machine"] = "i386"
