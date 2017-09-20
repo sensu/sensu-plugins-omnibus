@@ -10,3 +10,7 @@ services:
 #- docker run ubuntu:16.04 /bin/sh -c "lsb_release -a"
 
 script: ./build.sh
+
+addons:
+  artifacts:
+    s3_region: "us-west-2"
