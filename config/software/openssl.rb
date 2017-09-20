@@ -115,7 +115,7 @@ build do
           # with inline asm enabled
           "./Configure linux64-s390x -DOPENSSL_NO_INLINE_ASM"
         elsif linux?
-          "./Configure linux-i686"
+          "./Configure linux-x32"
         else
           "./config"
         end
