@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/sensu/omnibus.git
-  revision: 78c12b55fde5cde56a84c6b4b17bec075c52fd8d
-  branch: sensu
+  revision: 22d0b1eb2f6ad176c499948c025965907755120a
+  branch: sensu-testing
   specs:
     omnibus (5.5.0)
       aws-sdk (~> 2)
@@ -226,4 +226,4 @@ DEPENDENCIES
   winrm-fs
 
 BUNDLED WITH
-   1.13.6
+   1.15.4
