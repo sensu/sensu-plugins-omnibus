@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/sensu/omnibus.git
-  revision: 73f33ab5372d1836b47bd106cc72a83da7c6a100
+  revision: 90dff0c0c5a58244838e7d21dfe2af09962dbe25
   branch: sensu-testing
   specs:
     omnibus (5.5.0)
@@ -21,13 +21,13 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     artifactory (2.5.1)
-    aws-sdk (2.10.49)
-      aws-sdk-resources (= 2.10.49)
-    aws-sdk-core (2.10.49)
+    aws-sdk (2.10.50)
+      aws-sdk-resources (= 2.10.50)
+    aws-sdk-core (2.10.50)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.10.49)
-      aws-sdk-core (= 2.10.49)
+    aws-sdk-resources (2.10.50)
+      aws-sdk-core (= 2.10.50)
     aws-sigv4 (1.0.2)
     berkshelf (5.6.5)
       addressable (~> 2.3, >= 2.3.4)

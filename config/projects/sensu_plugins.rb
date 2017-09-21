@@ -29,15 +29,20 @@ version = "0.1.0"
 build_version version
 build_iteration 3000
 
+if ENV.key?["KERNEL_ARCH"]
+  ohai["kernel"]["machine"] = ENV["KERNEL_ARCH"]
+end
+
 override "ruby", version: "2.4.1"
 override "rubygems", version: "2.6.10"
 
 package :deb do
   section "Monitoring"
   vendor vendor
+  architecture ENV["DEB_ARCH"] if ENV.key?("DEB_ARCH")
 end
 
-platform_version = ohai["platform_version"]
+#platform_version = ohai["platform_version"]
 
 package :rpm do
   category "Monitoring"

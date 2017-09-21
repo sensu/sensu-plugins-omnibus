@@ -3,6 +3,10 @@ sudo: required
 services:
   - docker
 
+env:
+  - KERNEL_ARCH=i386 DEB_ARCH=i386
+  - KERNEL_ARCH=x86_64 DEB_ARCH=amd64
+
 #before_install:
 #- docker pull centos:6
 #- docker pull ubuntu:16.04
