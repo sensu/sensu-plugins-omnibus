@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/sensu/omnibus.git
-  revision: 3b576b3de95867bddd6b63fd3fb8eca6ec665e2c
+  revision: edf67c0fa5e4d4d4bbcde26be3bf5df2571a43c5
   branch: sensu-testing
   specs:
     omnibus (5.5.0)
