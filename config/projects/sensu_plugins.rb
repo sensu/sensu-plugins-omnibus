@@ -29,7 +29,7 @@ version = "0.1.0"
 build_version version
 build_iteration 3000
 
-if ENV.key?["KERNEL_ARCH"]
+if ENV.key?("KERNEL_ARCH")
   ohai["kernel"]["machine"] = ENV["KERNEL_ARCH"]
 end
 
