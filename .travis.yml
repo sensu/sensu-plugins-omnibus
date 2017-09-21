@@ -4,7 +4,7 @@ services:
   - docker
 
 env:
-  - KERNEL_ARCH=i386 DEB_ARCH=i386
+  - KERNEL_ARCH=i386 DEB_ARCH=i386 CFLAGS=-m32 LDFLAGS=-m32 CXXFLAGS=-m32 CPPFLAGS=-m32
   - KERNEL_ARCH=x86_64 DEB_ARCH=amd64
 
 #before_install:
