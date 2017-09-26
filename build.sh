@@ -2,6 +2,12 @@
 
 set -e
 
-sudo apt-get install -y fakeroot gcc-multilib g++-multilib
-bundle exec omnibus build sensu_plugins -l debug
-dpkg-deb -I pkg/*.deb
+docker run -P \
+       --name sensu-plugins-$PLATFORM-$PLATFORM_VERSION \
+       -v $PWD:/opt/sensu-plugins-omnibus \
+       -e PLATFORM=$PLATFORM \
+       -e PLATFORM_VERSION=$PLATFORM_VERSION \
+       -e KERNEL_ARCH=$KERNEL_ARCH \
+       -it --rm \
+       $PLATFORM:$PLATFORM_VERSION \
+       /opt/sensu-plugins-omnibus/docker-build.sh

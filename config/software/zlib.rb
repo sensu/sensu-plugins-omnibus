@@ -24,7 +24,7 @@ version "1.2.6" do
   source md5: "618e944d7c7cd6521551e30b32322f4a"
 end
 
-source url: "http://downloads.sourceforge.net/project/libpng/zlib/#{version}/zlib-#{version}.tar.gz"
+source url: "https://s3-us-west-2.amazonaws.com/sensu-omnibus-cache/zlib-1.2.8.tar.gz"
 
 license "Zlib"
 license_file "README"
