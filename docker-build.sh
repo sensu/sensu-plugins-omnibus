@@ -7,7 +7,7 @@ install_dependencies() {
 	apt-get update
 	apt-get install -y build-essential curl fakeroot
     elif [ "$PLATFORM" = "centos" ]; then
-	yum -y install perl rpm-build yajl yajl-devel
+	yum -y install perl rpm-build yajl yajl-devel glibc-devel.i686
 	yum -y groupinstall 'Development Tools'
     fi
 }
@@ -62,8 +62,7 @@ install_gem_dependencies() {
 build_project() {
     echo "Building project"
     cd /opt/sensu-plugins-omnibus
-    gem list
-    FORCE_FFI_YAJL=ffi bundle exec omnibus build sensu_plugins -l debug
+    bundle exec omnibus build sensu_plugins -l debug
 }
 
 install_dependencies
