@@ -48,13 +48,12 @@ setup_compiler_flags() {
 
 install_gem_dependencies() {
     cd /opt/sensu-plugins-omnibus
-    gem install ffi-yajl -v "2.3.1"
     bundle install
 }
 
 build_project() {
     cd /opt/sensu-plugins-omnibus
-    bundle exec omnibus build sensu_plugins -l debug
+    FORCE_FFI_YAJL=ffi bundle exec omnibus build sensu_plugins -l debug
 }
 
 install_dependencies
