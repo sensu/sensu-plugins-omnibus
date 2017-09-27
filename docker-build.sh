@@ -46,9 +46,14 @@ setup_compiler_flags() {
     fi
 }
 
+install_gem_dependencies() {
+    cd /opt/sensu-plugins-omnibus
+    gem install ffi
+    bundle install
+}
+
 build_project() {
     cd /opt/sensu-plugins-omnibus
-    bundle install
     bundle exec omnibus build sensu_plugins -l debug
 }
 
@@ -56,4 +61,5 @@ install_dependencies
 install_toolchain
 configure_git
 setup_compiler_flags
+install_gem_dependencies
 build_project
