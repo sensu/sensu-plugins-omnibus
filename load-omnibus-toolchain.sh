@@ -55,11 +55,11 @@ echo "Bash.........$(bash --version | head -1)"
 echo "Bundler......$(bundle --version | head -1)"
 
 if [ "$os" = "aix" ]; then
-    'echo "XLC..........$(xlc -qversion | head -1)"'
+    echo "XLC..........$(xlc -qversion | head -1)"
 #elif [ $os = "freebsd" ] && platform_version <= 9
-#    'echo "GCC..........$(gcc49 --version | head -1)"'
+#    echo "GCC..........$(gcc49 --version | head -1)"
 else
-    'echo "GCC..........$(gcc --version | head -1)"'
+    echo "GCC..........$(gcc --version | head -1)"
 fi
 
 echo "Git..........$(git --version | head -1)"
