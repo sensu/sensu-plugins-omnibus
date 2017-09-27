@@ -1,6 +1,8 @@
 #!/bin/bash
 
 install_dependencies() {
+    echo "Installing dependencies"
+
     if [ "$PLATFORM" = "ubuntu" ]; then
 	apt-get update
 	apt-get install -y build-essential curl fakeroot
@@ -10,6 +12,8 @@ install_dependencies() {
 }
 
 install_toolchain() {
+    echo "Installing toolchain"
+
     export TOOLCHAIN_VERSION=1.1.77
     export TOOLCHAIN_BUILD_NUMBER=1
     export TOOLCHAIN_BASE_URL=https://packages.chef.io/files/stable/omnibus-toolchain/${TOOLCHAIN_VERSION}
@@ -27,11 +31,13 @@ install_toolchain() {
 }
 
 configure_git() {
+    echo "Configuring git"
     git config --global user.email "justin@sensu.io"
     git config --global user.name "Justin Kolberg"
 }
 
 setup_compiler_flags() {
+    echo "Setting compiler flags"
     if [ "$PLATFORM" = "ubuntu" ]; then
 	if [ "$KERNEL_ARCH" = "i386" ]; then
 	    sudo apt-get install -y gcc-multilib g++-multilib
@@ -47,11 +53,13 @@ setup_compiler_flags() {
 }
 
 install_gem_dependencies() {
+    echo "Installing gem dependencies"
     cd /opt/sensu-plugins-omnibus
     bundle install
 }
 
 build_project() {
+    echo "Building project"
     cd /opt/sensu-plugins-omnibus
     FORCE_FFI_YAJL=ffi bundle exec omnibus build sensu_plugins -l debug
 }
