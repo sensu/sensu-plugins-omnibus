@@ -215,6 +215,7 @@ PLATFORMS
 DEPENDENCIES
   artifactory (= 2.5.1)
   berkshelf (~> 5.6)
+  ffi (= 1.9.18)
   ffi-yajl (= 2.3.1)
   kitchen-ec2 (~> 1.2)
   kitchen-vagrant (~> 0.18)

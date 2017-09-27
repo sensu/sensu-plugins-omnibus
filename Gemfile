@@ -4,6 +4,7 @@ gem 'rake'
 
 # Install omnibus
 gem 'omnibus', :git => 'https://github.com/sensu/omnibus.git', :branch => 'sensu-testing'
+gem 'ffi', '1.9.18'
 gem 'ffi-yajl', '2.3.1'
 gem 'artifactory', '2.5.1'
 
