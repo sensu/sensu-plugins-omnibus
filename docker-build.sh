@@ -7,7 +7,8 @@ install_dependencies() {
 	apt-get update
 	apt-get install -y build-essential curl fakeroot
     elif [ "$PLATFORM" = "centos" ]; then
-	yum -y install gcc perl rpm-build yajl yajl-devel
+	yum -y install perl rpm-build yajl yajl-devel
+	yum -y groupinstall 'Development Tools'
     fi
 }
 
