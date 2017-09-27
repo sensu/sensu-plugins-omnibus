@@ -61,6 +61,7 @@ install_gem_dependencies() {
 build_project() {
     echo "Building project"
     cd /opt/sensu-plugins-omnibus
+    gem list
     FORCE_FFI_YAJL=ffi bundle exec omnibus build sensu_plugins -l debug
 }
 
