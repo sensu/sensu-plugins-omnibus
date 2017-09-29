@@ -91,3 +91,4 @@ configure_git
 setup_compiler_flags
 install_gem_dependencies
 build_project
+publish_packages
