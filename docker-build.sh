@@ -40,7 +40,7 @@ setup_compiler_flags() {
     echo "Setting compiler flags"
     if [ "$PLATFORM" = "ubuntu" ]; then
 	if [ "$KERNEL_ARCH" = "i386" ]; then
-	    sudo apt-get install -y gcc-multilib g++-multilib
+	    apt-get install -y gcc-multilib g++-multilib
 	    export DEB_ARCH=i386
 	    export CFLAGS=-m32
 	    export LDFLAGS=-m32
@@ -51,13 +51,13 @@ setup_compiler_flags() {
 	fi
     elif [ "$PLATFORM" = "centos" ]; then
 	if [ "$KERNEL_ARCH" = "i386" ]; then
-	    sudo yum install glibc-devel.i686
+	    yum install glibc-devel.i686
 	    export CFLAGS=-m32
 	    export LDFLAGS=-m32
 	    export CXXFLAGS=-m32
 	    export CPPFLAGS=-m32
 	elif [ "$KERNEL_ARCH" = "x86_64" ]; then
-	    sudo yum install glibc-devel.x86_64
+	    yum install glibc-devel.x86_64
 	fi
     fi
 }
