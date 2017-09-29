@@ -8,6 +8,7 @@ gem 'omnibus', :git => 'https://github.com/sensu/omnibus.git', :branch => 'sensu
 #gem 'ffi-yajl', '2.3.1'
 gem 'ffi-yajl', :git => 'https://github.com/amdprophet/ffi-yajl.git', :branch => 'master'
 gem 'artifactory', '2.5.1'
+gem 'packagecloud-ruby', '1.0.5'
 
 # This development group is installed by default when you run `bundle install`,
 # but if you are using Omnibus in a CI-based infrastructure, you do not need
