@@ -55,6 +55,7 @@ setup_compiler_flags() {
 install_gem_dependencies() {
     echo "Installing gem dependencies"
     cd /opt/sensu-plugins-omnibus
+    rm -rf .bundle
     bundle install
 }
 
