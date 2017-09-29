@@ -54,7 +54,6 @@ publish_s3_secret_key ""
 # --------------------------------------
 packagecloud_user ENV["PACKAGECLOUD_USER"] unless ENV.has_key?("PACKAGECLOUD_USER")
 packagecloud_token ENV["PACKAGECLOUD_TOKEN"] unless ENV.has_key?("PACKAGECLOUD_TOKEN")
-packagecloud_repo ENV["PACKAGECLOUD_REPO"] unless ENV.has_key?("PACKAGECLOUD_REPO")
 packagecloud_distros ENV["PACKAGECLOUD_DISTROS"] unless ENV.has_key?("PACKAGECLOUD_DISTROS")
 
 # Customize compiler bits

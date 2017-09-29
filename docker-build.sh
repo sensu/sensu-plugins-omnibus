@@ -75,6 +75,16 @@ build_project() {
     bundle exec omnibus build sensu_plugins -l debug
 }
 
+publish_packages() {
+    echo "Publishing packages"
+    cd /opt/sensu-plugins-omnibus
+    if [ "$PLATFORM" = "ubuntu" ]; then
+	bundle exec omnibus publish packagecloud $PACKAGECLOUD_REPO pkg/*.deb
+    elif [ "$PLATFORM" = "centos" ]; then
+	bundle exec omnibus publish packagecloud $PACKAGECLOUD_REPO pkg/*.rpm
+    fi
+}
+
 install_dependencies
 install_toolchain
 configure_git
