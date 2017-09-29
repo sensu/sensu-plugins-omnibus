@@ -51,7 +51,7 @@ setup_compiler_flags() {
 	fi
     elif [ "$PLATFORM" = "centos" ]; then
 	if [ "$KERNEL_ARCH" = "i386" ]; then
-	    yum -y install glibc-devel.i686
+	    yum -y install glibc-devel.i686 libgcc.i686 libstdc++-devel.i686 ncurses-devel.i686
 	    export CFLAGS=-m32
 	    export LDFLAGS=-m32
 	    export CXXFLAGS=-m32
