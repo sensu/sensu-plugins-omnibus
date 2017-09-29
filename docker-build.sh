@@ -7,7 +7,7 @@ install_dependencies() {
 	apt-get update
 	apt-get install -y build-essential curl fakeroot
     elif [ "$PLATFORM" = "centos" ]; then
-	yum -y install perl rpm-build yajl yajl-devel make automake gcc gcc-c++ kernel-devel glibc-devel.i686 glibc-devel.x86_64 util-linux-ng
+	yum -y install perl rpm-build make automake gcc gcc-c++ util-linux-ng
     fi
 }
 
@@ -48,6 +48,16 @@ setup_compiler_flags() {
 	    export CPPFLAGS=-m32
 	elif [ "$KERNEL_ARCH" = "x86_64" ]; then
 	    export DEB_ARCH=amd64
+	fi
+    elif [ "$PLATFORM" = "centos" ]; then
+	if [ "$KERNEL_ARCH" = "i386" ]; then
+	    sudo yum install glibc-devel.i686
+	    export CFLAGS=-m32
+	    export LDFLAGS=-m32
+	    export CXXFLAGS=-m32
+	    export CPPFLAGS=-m32
+	elif [ "$KERNEL_ARCH" = "x86_64" ]; then
+	    sudo yum install glibc-devel.x86_64
 	fi
     fi
 }
