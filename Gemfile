@@ -4,8 +4,9 @@ gem 'rake'
 
 # Install omnibus
 gem 'omnibus', :git => 'https://github.com/sensu/omnibus.git', :branch => 'sensu-testing'
-gem 'ffi', '1.9.18'
-gem 'ffi-yajl', '2.3.1'
+#gem 'ffi', '1.9.18'
+#gem 'ffi-yajl', '2.3.1'
+gem 'ffi-yajl', :git => 'https://github.com/amdprophet/ffi-yajl.git', :branch => 'master'
 gem 'artifactory', '2.5.1'
 
 # This development group is installed by default when you run `bundle install`,

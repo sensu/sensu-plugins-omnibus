@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/amdprophet/ffi-yajl.git
+  revision: 8fd086bd3d6bfe87ef4a0d65e6ad3bbe92a1fdc5
+  branch: master
+  specs:
+    ffi-yajl (2.3.1)
+      libyajl2 (~> 1.2)
+
+GIT
   remote: https://github.com/sensu/omnibus.git
   revision: edf67c0fa5e4d4d4bbcde26be3bf5df2571a43c5
   branch: sensu-testing
@@ -75,8 +83,6 @@ GEM
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.18)
-    ffi-yajl (2.3.1)
-      libyajl2 (~> 1.2)
     fuzzyurl (0.9.0)
     gssapi (1.2.0)
       ffi (>= 1.0.1)
@@ -215,8 +221,7 @@ PLATFORMS
 DEPENDENCIES
   artifactory (= 2.5.1)
   berkshelf (~> 5.6)
-  ffi (= 1.9.18)
-  ffi-yajl (= 2.3.1)
+  ffi-yajl!
   kitchen-ec2 (~> 1.2)
   kitchen-vagrant (~> 0.18)
   omnibus!
