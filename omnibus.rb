@@ -52,9 +52,9 @@ publish_s3_secret_key ""
 
 # Enable packagecloud package uploading
 # --------------------------------------
-packagecloud_user ENV["PACKAGECLOUD_USER"] if ENV.has_key?("PACKAGECLOUD_USER")
-packagecloud_token ENV["PACKAGECLOUD_TOKEN"] if ENV.has_key?("PACKAGECLOUD_TOKEN")
-packagecloud_distros ENV["PACKAGECLOUD_DISTROS"] if ENV.has_key?("PACKAGECLOUD_DISTROS")
+packagecloud_user ENV["PACKAGECLOUD_USER"]
+packagecloud_token ENV["PACKAGECLOUD_TOKEN"]
+packagecloud_distros ENV["PACKAGECLOUD_DISTROS"]
 
 # Customize compiler bits
 # ------------------------------
