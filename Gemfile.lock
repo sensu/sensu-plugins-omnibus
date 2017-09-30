@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/sensu/omnibus.git
-  revision: 1fc497d54ed8d3d8e3d5a3e3414934f5f4c72033
+  revision: d5e520aac71aa321fa984002b1273a9e718c2649
   branch: sensu-testing
   specs:
     omnibus (5.5.0)
