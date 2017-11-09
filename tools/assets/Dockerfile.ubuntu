@@ -1,0 +1,11 @@
+FROM ubuntu:16.04
+
+RUN apt-get update
+
+RUN apt-get install -y curl build-essential
+
+RUN curl -s https://packagecloud.io/install/repositories/sensu/community/script.deb.sh | bash
+
+RUN apt-get install sensu-plugins-ruby
+
+COPY create-asset.sh /usr/bin/create-asset.sh

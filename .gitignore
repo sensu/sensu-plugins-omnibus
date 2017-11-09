@@ -12,3 +12,4 @@ vendor/cookbooks
 .envrc
 site-cookbooks/omnibus_sensu/files/default/archive.zip
 local/*
+tools/assets/**/*.tar
