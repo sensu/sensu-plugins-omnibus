@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# WARNING: REQUIRES /bin/sh
+#
+# - must run on /bin/sh on solaris 9
+# - must run on /bin/sh on AIX 6.x
+# - if you think you are a bash wizard, you probably do not understand
+#   this programming language.  do not touch.
+# - if you are under 40, get peer review from your elders.
+#
+
+export PATH=/opt/sensu-plugins-ruby/embedded/bin:$PATH
+export GEM_PATH=/opt/sensu-plugins-ruby/embedded/lib/ruby/gems/2.4.0:$GEM_PATH
+
+/opt/sensu-plugins-ruby/embedded/bin/sensu-install $@
