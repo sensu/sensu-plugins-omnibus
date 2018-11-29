@@ -35,6 +35,7 @@ end
 
 override "ruby", version: "2.4.1"
 override "rubygems", version: "2.6.10"
+override "sensu-install", version: "0.1.0"
 
 package :deb do
   section "Monitoring"
@@ -70,6 +71,9 @@ dependency "preparation"
 # ruby & rubygem dependencies/components
 dependency "ruby"
 dependency "rubygems"
+
+# Sensu Ruby Plugin installer
+dependency "sensu-install"
 
 # Make sure Windows gets a gem.bat
 dependency "shebang-cleanup" if windows?
