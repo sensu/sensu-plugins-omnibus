@@ -25,9 +25,9 @@ else
   install_dir "#{default_root}/#{name}"
 end
 
-version = "0.1.0"
+version = "0.2.0"
 build_version version
-build_iteration 3000
+build_iteration 1
 
 if ENV.key?("KERNEL_ARCH")
   ohai["kernel"]["machine"] = ENV["KERNEL_ARCH"]
