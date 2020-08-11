@@ -16,18 +16,18 @@ install_dependencies() {
 install_toolchain() {
     echo "Installing toolchain"
 
-    export TOOLCHAIN_VERSION=2.0.2
+    export TOOLCHAIN_VERSION=1.1.99
     export TOOLCHAIN_BUILD_NUMBER=1
     export TOOLCHAIN_BASE_URL=https://packages.chef.io/repos
 
     if [ "$PLATFORM" = "ubuntu" ]; then
         export TOOLCHAIN_FILENAME=omnibus-toolchain_${TOOLCHAIN_VERSION}-${TOOLCHAIN_BUILD_NUMBER}_amd64.deb
-        curl -O ${TOOLCHAIN_BASE_URL}/apt/stable/debian/8/${TOOLCHAIN_FILENAME}
+        curl -O ${TOOLCHAIN_BASE_URL}/apt/stable/ubuntu/14.04/${TOOLCHAIN_FILENAME}
         dpkg -i ${TOOLCHAIN_FILENAME}
         rm ${TOOLCHAIN_FILENAME}
     elif [ "$PLATFORM" = "centos" ]; then
         export TOOLCHAIN_FILENAME=omnibus-toolchain-${TOOLCHAIN_VERSION}-${TOOLCHAIN_BUILD_NUMBER}.el6.x86_64.rpm
-        rpm -Uvh ${TOOLCHAIN_BASE_URL}/yum/stable/el/6/${TOOLCHAIN_FILENAME}
+        rpm -Uvh ${TOOLCHAIN_BASE_URL}/yum/stable/el/6/x86_64/${TOOLCHAIN_FILENAME}
     fi
 
     source /opt/sensu-plugins-omnibus/load-omnibus-toolchain.sh
