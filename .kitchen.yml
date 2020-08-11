@@ -12,6 +12,8 @@ provisioner:
       publishers:
 
 platforms:
+  - name: centos-8
+    run_list: yum-epel::default
   - name: centos-7
     run_list: yum-epel::default
   - name: centos-7-i386
@@ -20,6 +22,14 @@ platforms:
     run_list: yum-epel::default
   - name: centos-6-i386
     run_list: yum-epel::default
+  - name: ubuntu-20.04
+    run_list: apt::default
+  - name: ubuntu-20.04-i386
+    run_list: apt::default
+  - name: ubuntu-18.04
+    run_list: apt::default
+  - name: ubuntu-18.04-i386
+    run_list: apt::default
   - name: ubuntu-16.04
     run_list: apt::default
   - name: ubuntu-16.04-i386
@@ -27,6 +37,18 @@ platforms:
   - name: ubuntu-14.04
     run_list: apt::default
   - name: ubuntu-14.04-i386
+    run_list: apt::default
+  - name: debian-10
+    run_list: apt::default
+  - name: ubuntu-10-i386
+    run_list: apt::default
+  - name: debian-9
+    run_list: apt::default
+  - name: ubuntu-9-i386
+    run_list: apt::default
+  - name: debian-8
+    run_list: apt::default
+  - name: ubuntu-8-i386
     run_list: apt::default
 
 suites:
