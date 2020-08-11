@@ -19,7 +19,6 @@ install_toolchain() {
     export TOOLCHAIN_VERSION=2.0.2
     export TOOLCHAIN_BUILD_NUMBER=1
     export TOOLCHAIN_BASE_URL=https://packages.chef.io/repos
-    export TOOLCHAIN_BASE_URL=https://packages.chef.io/files/stable/omnibus-toolchain/${TOOLCHAIN_VERSION}
 
     if [ "$PLATFORM" = "ubuntu" ]; then
         export TOOLCHAIN_FILENAME=omnibus-toolchain_${TOOLCHAIN_VERSION}-${TOOLCHAIN_BUILD_NUMBER}_amd64.deb
