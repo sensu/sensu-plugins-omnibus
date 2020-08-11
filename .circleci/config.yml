@@ -37,25 +37,25 @@ executors:
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: debian/buster
-  ubuntu-14.04:
+  ubuntu-1404:
     docker:
       - image: ubuntu:14.04
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: ubuntu/trusty
-  ubuntu-16.04:
+  ubuntu-1604:
     docker:
       - image: ubuntu:16.04
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: ubuntu/quantal
-  ubuntu-18.04:
+  ubuntu-1804:
     docker:
       - image: ubuntu:18.04
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: ubuntu/bionic
-  ubuntu-20.04:
+  ubuntu-2004:
     docker:
       - image: ubuntu:20.04
     environment:
@@ -109,22 +109,22 @@ workflows:
           matrix:
             arch: [ i386, x86_64 ]
       - build:
-          name: ubuntu-14.04-<< matrix.arch >>
+          name: ubuntu-1404-<< matrix.arch >>
           executor: ubuntu-14.04
           matrix:
             arch: [ i386, x86_64 ]
       - build:
-          name: ubuntu-16.04-<< matrix.arch >>
+          name: ubuntu-1604-<< matrix.arch >>
           executor: ubuntu-16.04
           matrix:
             arch: [ i386, x86_64 ]
       - build:
-          name: ubuntu-18.04-<< matrix.arch >>
+          name: ubuntu-1804-<< matrix.arch >>
           executor: ubuntu-18.04
           matrix:
             arch: [ i386, x86_64 ]
       - build:
-          name: ubuntu-20.04-<< matrix.arch >>
+          name: ubuntu-2004-<< matrix.arch >>
           executor: ubuntu-20.04
           matrix:
             arch: [ i386, x86_64 ]
