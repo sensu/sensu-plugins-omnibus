@@ -9,14 +9,14 @@ install_dependencies() {
         apt-get update
         apt-get install -y build-essential curl fakeroot
     elif [ "$PLATFORM" = "centos" ]; then
-        yum -y install perl rpm-build make automake gcc gcc-c++ util-linux-ng
+        yum -y install perl rpm-build make automake gcc gcc-c++ util-linux-ng which python
     fi
 }
 
 install_toolchain() {
     echo "Installing toolchain"
 
-    export TOOLCHAIN_VERSION=1.1.77
+    export TOOLCHAIN_VERSION=2.0.2
     export TOOLCHAIN_BUILD_NUMBER=1
     export TOOLCHAIN_BASE_URL=https://packages.chef.io/files/stable/omnibus-toolchain/${TOOLCHAIN_VERSION}
 
