@@ -79,7 +79,7 @@ GEM
     chef-sugar (3.5.0)
     cleanroom (1.0.0)
     erubis (2.7.0)
-    excon (0.59.0)
+    excon (0.76.0)
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.18)
