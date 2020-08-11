@@ -76,11 +76,16 @@ jobs:
         type: string
     steps:
       - checkout
+      - run: |
+          if [ "$PLATFORM" = "ubuntu" ]; then
+            apt-get update
+            apt-get install -y ca-certificates
+          fi
       - restore_cache:
-          key: omnibus-v1
+          key: omnibus-${PACKAGECLOUD_DISTROS}-v1
       - run: ./docker-build.sh
       - save_cache:
-          key: omnibus-v1
+          key: omnibus-${PACKAGECLOUD_DISTROS}-v1
           paths:
             - /opt/sensu-plugins-omnibus/local
       - aws-s3/sync:
