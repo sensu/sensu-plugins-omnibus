@@ -76,7 +76,13 @@ jobs:
         type: string
     steps:
       - checkout
+      - restore_cache:
+          key: omnibus-v1
       - run: ./docker-build.sh
+      - save_cache:
+          key: omnibus-v1
+          paths:
+            - /opt/sensu-plugins-omnibus/local
       - aws-s3/sync:
           arguments: --acl public-read
           aws-access-key-id: ARTIFACT_KEY
