@@ -1,0 +1,130 @@
+version: 2.1
+
+executors:
+  centos-6:
+    docker:
+      - image: centos:6
+    environment:
+      PLATFORM: centos
+      PACKAGECLOUD_DISTROS: el/6
+  centos-7:
+    docker:
+      - image: centos:7
+    environment:
+      PLATFORM: centos
+      PACKAGECLOUD_DISTROS: el/7
+  centos-8:
+    docker:
+      - image: centos:8
+    environment:
+      PLATFORM: centos
+      PACKAGECLOUD_DISTROS: el/8
+  debian-8:
+    docker:
+      - image: debian:8
+    environment:
+      PLATFORM: ubuntu
+      PACKAGECLOUD_DISTROS: debian/jessie
+  debian-9:
+    docker:
+      - image: debian:9
+    environment:
+      PLATFORM: ubuntu
+      PACKAGECLOUD_DISTROS: debian/stretch
+  debian-10:
+    docker:
+      - image: debian:9
+    environment:
+      PLATFORM: ubuntu
+      PACKAGECLOUD_DISTROS: debian/buster
+  ubuntu-14.04:
+    docker:
+      - image: ubuntu:14.04
+    environment:
+      PLATFORM: ubuntu
+      PACKAGECLOUD_DISTROS: ubuntu/trusty
+  ubuntu-16.04:
+    docker:
+      - image: ubuntu:16.04
+    environment:
+      PLATFORM: ubuntu
+      PACKAGECLOUD_DISTROS: ubuntu/quantal
+  ubuntu-18.04:
+    docker:
+      - image: ubuntu:18.04
+    environment:
+      PLATFORM: ubuntu
+      PACKAGECLOUD_DISTROS: ubuntu/bionic
+  ubuntu-20.04:
+    docker:
+      - image: ubuntu:20.04
+    environment:
+      PLATFORM: ubuntu
+      PACKAGECLOUD_DISTROS: ubuntu/focal
+
+jobs:
+  build:
+    executor: << parameters.executor >>
+    working_directory: /opt/sensu-plugins-omnibus
+    parameters:
+      executor:
+        type: string
+      arch:
+        type: string
+    steps:
+      - checkout
+      - run: ./docker-build.sh
+      
+workflows:
+  build:
+    jobs:
+      - build:
+          name: centos-6-<< matrix.arch >>
+          executor: centos-6
+          matrix:
+            arch: [ i386, x86_64 ]
+      - build:
+          name: centos-7-<< matrix.arch >>
+          executor: centos-7
+          matrix:
+            arch: [ i386, x86_64 ]
+      - build:
+          name: centos-8-<< matrix.arch >>
+          executor: centos-8
+          matrix:
+            arch: [ x86_64 ]
+      - build:
+          name: debian-8-<< matrix.arch >>
+          executor: debian-8
+          matrix:
+            arch: [ i386, x86_64 ]
+      - build:
+          name: debian-9-<< matrix.arch >>
+          executor: debian-9
+          matrix:
+            arch: [ i386, x86_64 ]
+      - build:
+          name: debian-10-<< matrix.arch >>
+          executor: debian-10
+          matrix:
+            arch: [ i386, x86_64 ]
+      - build:
+          name: ubuntu-14.04-<< matrix.arch >>
+          executor: ubuntu-14.04
+          matrix:
+            arch: [ i386, x86_64 ]
+      - build:
+          name: ubuntu-16.04-<< matrix.arch >>
+          executor: ubuntu-16.04
+          matrix:
+            arch: [ i386, x86_64 ]
+      - build:
+          name: ubuntu-18.04-<< matrix.arch >>
+          executor: ubuntu-18.04
+          matrix:
+            arch: [ i386, x86_64 ]
+      - build:
+          name: ubuntu-20.04-<< matrix.arch >>
+          executor: ubuntu-20.04
+          matrix:
+            arch: [ i386, x86_64 ]
