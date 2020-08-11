@@ -156,7 +156,7 @@ GEM
       multi_json (~> 1.0)
     plist (3.3.0)
     public_suffix (3.0.0)
-    rake (12.1.0)
+    rake (12.3.3)
     retryable (2.0.4)
     ridley (5.1.1)
       addressable
