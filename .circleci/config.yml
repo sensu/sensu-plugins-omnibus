@@ -116,25 +116,25 @@ workflows:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-1404-<< matrix.arch >>
-          executor: ubuntu-14.04
+          executor: ubuntu-1404
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-1604-<< matrix.arch >>
-          executor: ubuntu-16.04
+          executor: ubuntu-1604
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-1804-<< matrix.arch >>
-          executor: ubuntu-18.04
+          executor: ubuntu-1804
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-2004-<< matrix.arch >>
-          executor: ubuntu-20.04
+          executor: ubuntu-2004
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
