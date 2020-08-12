@@ -68,6 +68,8 @@ executors:
 commands:
   install_python:
     parameters:
+      executor:
+        type: string
       version:
         type: string
         default: 3.8.5
@@ -82,7 +84,7 @@ commands:
             yum -y install git zlib-devel openssl-devel libffi-devel
           fi
       - restore_cache:
-          key: python-<< parameters.version >>-${PACKAGECLOUD_DISTROS}-v2
+          key: python-<< parameters.version >>-<< parameters.executor >>-v2
       - run:
           name: Install Python << parameters.version >>
           command: |
@@ -103,9 +105,9 @@ commands:
             make
             make install
       - save_cache:
-          key: python-<< parameters.version >>-${PACKAGECLOUD_DISTROS}-v2
+          key: python-<< parameters.version >>-<< parameters.executor >>-v2
           paths:
-            - ${HOME}/.pyenv
+            - /opt/python
 
 jobs:
   build:
@@ -116,22 +118,25 @@ jobs:
         type: string
       arch:
         type: string
+    environment:
+      KERNEL_ARCH: << parameters.arch >>
     steps:
       - checkout
-      - install_python
+      - install_python:
+          executor: << parameters.executor >>
       - restore_cache:
-          key: omnibus-${PACKAGECLOUD_DISTROS}-v2
+          key: omnibus-<< parameters.executor >>-<< parameters.arch >>-v2
       - run: ./docker-build.sh
       - save_cache:
-          key: omnibus-${PACKAGECLOUD_DISTROS}-v2
+          key: omnibus-<< parameters.executor >>-<< parameters.arch >>-v2
           paths:
             - /opt/sensu-plugins-omnibus/local
             - /usr/bin/sensu-install
       - aws-s3/sync:
           arguments: --acl public-read
-          aws-access-key-id: ARTIFACT_KEY
-          aws-secret-access-key: ARTIFACT_SECRET
-          aws-region: ARTIFACT_REGION
+          aws-access-key-id: ARTIFACTS_KEY
+          aws-secret-access-key: ARTIFACTS_SECRET
+          aws-region: ARTIFACTS_REGION
           from: pkg
           to: "s3://${ARTIFACTS_BUCKET}/$(date +'%Y-%m-%d_%T')_${CIRCLE_WORKFLOW_ID}"
       
