@@ -88,6 +88,11 @@ commands:
       - run:
           name: Install Python << parameters.version >>
           command: |
+            env
+            which python
+            ls -l /opt/python
+            ls -l /opt/python/bin
+            ls -l /opt/python/usr/bin
             if which python; then
               if python -V | grep "<< parameters.version >>"; then
                 echo "python << parameters.version >> is already installed."
@@ -97,6 +102,7 @@ commands:
               fi
             fi
 
+            echo "python not found - installing."
             rm -rf /opt/python/*
             curl -Lo /tmp/python.tgz https://www.python.org/ftp/python/<< parameters.version >>/Python-<< parameters.version >>.tgz
             tar -C /tmp -zxf /tmp/python.tgz
