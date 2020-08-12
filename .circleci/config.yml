@@ -83,15 +83,6 @@ commands:
       - restore_cache:
           key: python-<< parameters.version >>-${PACKAGECLOUD_DISTROS}-v1
       - run:
-          name: Install pyenv
-          command: |
-            if which pyenv; then
-              echo "pyenv is already installed."
-              exit 0
-            fi
-            curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-      - run: echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> $BASH_ENV
-      - run: echo 'eval "$(pyenv init -)"' >> $BASH_ENV
       - run:
           name: Install Python << parameters.version >>
           command: |
@@ -103,9 +94,13 @@ commands:
                 echo "python is already installed but it is the wrong version."
               fi
             fi
-            set -x
-            pyenv install -v << parameters.version >>
-      - run: pyenv global << parameters.version >>
+
+            curl -Lo /tmp/python.tgz https://www.python.org/ftp/python/<< parameters.version >>/Python-<< parameters.version >>.tgz
+            tar -C /tmp/python -zxf /tmp/python.tgz
+            cd /tmp/python
+            ./configure
+            make
+            make install
       - save_cache:
           key: python-<< parameters.version >>-${PACKAGECLOUD_DISTROS}-v1
           paths:
