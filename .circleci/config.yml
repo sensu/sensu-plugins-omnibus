@@ -92,6 +92,8 @@ jobs:
             else
               curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
             fi
+      - run: echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> $BASH_ENV
+      - run: echo 'eval "$(pyenv init -)"' >> $BASH_ENV
       - run: pyenv install -s 3.8.5
       - run: pyenv global 3.8.5
       - save_cache:
