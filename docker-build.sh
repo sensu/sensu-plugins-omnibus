@@ -9,7 +9,7 @@ install_dependencies() {
         apt-get update
         apt-get install -y build-essential curl fakeroot
     elif [ "$PLATFORM" = "centos" ]; then
-        yum -y install perl rpm-build make automake gcc gcc-c++ util-linux-ng which python2
+        yum -y install perl rpm-build make automake gcc gcc-c++ util-linux-ng which
     fi
 }
 

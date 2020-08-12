@@ -81,6 +81,8 @@ jobs:
             apt-get update
             apt-get install -y ca-certificates
           fi
+      - run: curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+      - run: pyenv install 3.8.5 && pyenv global 3.8.5
       - restore_cache:
           key: omnibus-${PACKAGECLOUD_DISTROS}-v2
       - run: ./docker-build.sh
