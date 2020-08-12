@@ -7,7 +7,7 @@ install_dependencies() {
 
     if [ "$PLATFORM" = "ubuntu" ]; then
         apt-get update
-        apt-get install -y build-essential curl fakeroot
+        apt-get install -y build-essential curl fakeroot tar
     elif [ "$PLATFORM" = "centos" ]; then
         yum -y install perl rpm-build make automake gcc gcc-c++ util-linux-ng which
     fi
@@ -27,7 +27,7 @@ install_toolchain() {
         rm ${TOOLCHAIN_FILENAME}
 
         # replace omnibus-toolchain tar with system tar
-        cp /usr/bin/tar /opt/omnibus-toolchain/embedded/bin/tar
+        cp $(which tar) /opt/omnibus-toolchain/embedded/bin/tar
     elif [ "$PLATFORM" = "centos" ]; then
         export TOOLCHAIN_FILENAME=omnibus-toolchain-${TOOLCHAIN_VERSION}-${TOOLCHAIN_BUILD_NUMBER}.el6.x86_64.rpm
         rpm -Uvh ${TOOLCHAIN_BASE_URL}/yum/stable/el/6/x86_64/${TOOLCHAIN_FILENAME}
