@@ -74,7 +74,7 @@ commands:
         type: string
         default: 3.8.5
     steps:
-      - run: echo 'export PATH="/opt/python/bin:$HOME/.local/bin:$PATH"' >> $BASH_ENV
+      - run: echo 'export PATH="/opt/python/usr/bin:$HOME/.local/bin:$PATH"' >> $BASH_ENV
       - run: |
           if [ "$PLATFORM" = "ubuntu" ]; then
             apt-get update
@@ -84,7 +84,7 @@ commands:
             yum -y install git zlib-devel openssl-devel libffi-devel
           fi
       - restore_cache:
-          key: python-<< parameters.version >>-<< parameters.executor >>-v3
+          key: python-<< parameters.version >>-<< parameters.executor >>-v4
       - run:
           name: Install Python << parameters.version >>
           command: |
@@ -101,11 +101,11 @@ commands:
             curl -Lo /tmp/python.tgz https://www.python.org/ftp/python/<< parameters.version >>/Python-<< parameters.version >>.tgz
             tar -C /tmp -zxf /tmp/python.tgz
             cd /tmp/Python-<< parameters.version >>
-            ./configure --prefix=/opt/python --with-ssl --enable-optimizations
+            ./configure --prefix=/opt/python --with-openssl
             make
             make install
       - save_cache:
-          key: python-<< parameters.version >>-<< parameters.executor >>-v3
+          key: python-<< parameters.version >>-<< parameters.executor >>-v4
           paths:
             - /opt/python
 
