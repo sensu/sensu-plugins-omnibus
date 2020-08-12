@@ -94,7 +94,7 @@ jobs:
             fi
       - run: echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> $BASH_ENV
       - run: echo 'eval "$(pyenv init -)"' >> $BASH_ENV
-      - run: pyenv install -s 3.8.5
+      - run: pyenv install -s -v 3.8.5
       - run: pyenv global 3.8.5
       - save_cache:
           key: python-${PACKAGECLOUD_DISTROS}-v1
