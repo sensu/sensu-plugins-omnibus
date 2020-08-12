@@ -65,6 +65,50 @@ executors:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: ubuntu/focal
 
+commands:
+  install_python:
+    parameters:
+      version:
+        type: string
+        default: 3.8.5
+    steps:
+      - run: |
+          if [ "$PLATFORM" = "ubuntu" ]; then
+            apt-get update
+            apt-get install -y ca-certificates curl git
+          elif [ "$PLATFORM" = "centos" ]; then
+            yum -y install git
+          fi
+      - restore_cache:
+          key: python-${PACKAGECLOUD_DISTROS}-v1
+      - run:
+          name: Install pyenv
+          command: |
+            if which pyenv; then
+              echo "pyenv is already installed."
+              exit 0
+            fi
+            curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+      - run: echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> $BASH_ENV
+      - run: echo 'eval "$(pyenv init -)"' >> $BASH_ENV
+      - run:
+          name: Install Python << parameters.version >>
+          command: |
+            if which python; then
+              if python -V | grep "<< parameters.version >>"; then
+                echo "python << parameters.version >> is already installed."
+                exit 0
+              else
+                echo "python is already installed but it is the wrong version."
+              fi
+            fi
+            pyenv install -v << parameters.version >>
+      - run: pyenv global << parameters.version >>
+      - save_cache:
+          key: python-${PACKAGECLOUD_DISTROS}-v1
+          paths:
+            - ${HOME}/.pyenv
+
 jobs:
   build:
     executor: << parameters.executor >>
@@ -76,30 +120,7 @@ jobs:
         type: string
     steps:
       - checkout
-      - run: |
-          if [ "$PLATFORM" = "ubuntu" ]; then
-            apt-get update
-            apt-get install -y ca-certificates curl git
-          elif [ "$PLATFORM" = "centos" ]; then
-            yum -y install git
-          fi
-      - restore_cache:
-          key: python-${PACKAGECLOUD_DISTROS}-v1
-      - run: |
-            if which pyenv; then
-              echo "pyenv is already installed"
-              exit 0
-            else
-              curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-            fi
-      - run: echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> $BASH_ENV
-      - run: echo 'eval "$(pyenv init -)"' >> $BASH_ENV
-      - run: pyenv install -s -v 3.8.5
-      - run: pyenv global 3.8.5
-      - save_cache:
-          key: python-${PACKAGECLOUD_DISTROS}-v1
-          paths:
-            - ${HOME}/.pyenv
+      - install_python
       - restore_cache:
           key: omnibus-${PACKAGECLOUD_DISTROS}-v2
       - run: ./docker-build.sh
