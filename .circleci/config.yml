@@ -75,12 +75,13 @@ commands:
       - run: |
           if [ "$PLATFORM" = "ubuntu" ]; then
             apt-get update
-            apt-get install -y ca-certificates curl git
+            apt-get install -y ca-certificates curl git build-essential
           elif [ "$PLATFORM" = "centos" ]; then
+            yum -y groupinstall 'Development Tools'
             yum -y install git
           fi
       - restore_cache:
-          key: python-${PACKAGECLOUD_DISTROS}-v1
+          key: python-<< parameters.version >>-${PACKAGECLOUD_DISTROS}-v1
       - run:
           name: Install pyenv
           command: |
@@ -105,7 +106,7 @@ commands:
             pyenv install -v << parameters.version >>
       - run: pyenv global << parameters.version >>
       - save_cache:
-          key: python-${PACKAGECLOUD_DISTROS}-v1
+          key: python-<< parameters.version >>-${PACKAGECLOUD_DISTROS}-v1
           paths:
             - ${HOME}/.pyenv
 
