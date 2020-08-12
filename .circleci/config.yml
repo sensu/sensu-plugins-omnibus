@@ -79,10 +79,25 @@ jobs:
       - run: |
           if [ "$PLATFORM" = "ubuntu" ]; then
             apt-get update
-            apt-get install -y ca-certificates
+            apt-get install -y ca-certificates curl git
+          elif [ "$PLATFORM" = "centos" ]; then
+            yum -y install git
           fi
-      - run: curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-      - run: pyenv install 3.8.5 && pyenv global 3.8.5
+      - restore_cache:
+          key: python-${PACKAGECLOUD_DISTROS}-v1
+      - run: |
+            if which pyenv; then
+              echo "pyenv is already installed"
+              exit 0
+            else
+              curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+            fi
+      - run: pyenv install -s 3.8.5
+      - run: pyenv global 3.8.5
+      - save_cache:
+          key: python-${PACKAGECLOUD_DISTROS}-v1
+          paths:
+            - ${HOME}/.pyenv
       - restore_cache:
           key: omnibus-${PACKAGECLOUD_DISTROS}-v2
       - run: ./docker-build.sh
