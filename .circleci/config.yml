@@ -97,7 +97,8 @@ commands:
 
             rm -rf /opt/python/*
             curl -Lo /tmp/python.tgz https://www.python.org/ftp/python/<< parameters.version >>/Python-<< parameters.version >>.tgz
-            tar -C /tmp/python -zxf /tmp/python.tgz
+            tar -C /tmp -zxf /tmp/python.tgz
+            ls -l /tmp
             cd /tmp/python
             ./configure --prefix=/opt/python
             make
