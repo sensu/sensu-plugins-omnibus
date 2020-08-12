@@ -89,7 +89,7 @@ commands:
           name: Install Python << parameters.version >>
           command: |
             env
-            which python
+            ls -l /opt/
             ls -l /opt/python
             ls -l /opt/python/bin
             ls -l /opt/python/usr/bin
