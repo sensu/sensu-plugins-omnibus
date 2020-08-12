@@ -81,8 +81,7 @@ commands:
             yum -y install git
           fi
       - restore_cache:
-          key: python-<< parameters.version >>-${PACKAGECLOUD_DISTROS}-v1
-      - run:
+          key: python-<< parameters.version >>-${PACKAGECLOUD_DISTROS}-v2
       - run:
           name: Install Python << parameters.version >>
           command: |
@@ -95,14 +94,15 @@ commands:
               fi
             fi
 
+            rm -rf /opt/python/*
             curl -Lo /tmp/python.tgz https://www.python.org/ftp/python/<< parameters.version >>/Python-<< parameters.version >>.tgz
             tar -C /tmp/python -zxf /tmp/python.tgz
             cd /tmp/python
-            ./configure
+            ./configure --prefix=/opt/python
             make
             make install
       - save_cache:
-          key: python-<< parameters.version >>-${PACKAGECLOUD_DISTROS}-v1
+          key: python-<< parameters.version >>-${PACKAGECLOUD_DISTROS}-v2
           paths:
             - ${HOME}/.pyenv
 
@@ -115,6 +115,8 @@ jobs:
         type: string
       arch:
         type: string
+    environment:
+      PATH: /opt/python/bin:$PATH
     steps:
       - checkout
       - install_python
