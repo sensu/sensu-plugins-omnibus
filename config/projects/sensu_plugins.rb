@@ -33,8 +33,8 @@ if ENV.key?("KERNEL_ARCH")
   ohai["kernel"]["machine"] = ENV["KERNEL_ARCH"]
 end
 
-override "ruby", version: "2.4.1"
-override "rubygems", version: "2.6.10"
+override "ruby", version: "2.4.10"
+override "rubygems", version: "3.1.4"
 override "sensu-install", version: "0.1.0"
 
 package :deb do

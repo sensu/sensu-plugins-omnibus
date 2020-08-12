@@ -37,6 +37,7 @@ if version && !source
     "2.4.4" => "440a89ad6a3b1b7a69b034233cc4658e",
     "2.4.5" => "5918319a439c33ac75fbbad7fd60749d",
     "2.4.8" => "dc77b51449dffe5b31776bff826bf559",
+    "3.1.4" => "9333a6dc3c45b10498d45edf72f85220",
   }
 
   if solaris_10?
@@ -46,7 +47,7 @@ if version && !source
 
   known_tarballs.each do |version, md5|
     self.version version do
-      source md5: md5, url: "http://production.cf.rubygems.org/rubygems/rubygems-#{version}.tgz"
+      source md5: md5, url: "https://github.com/rubygems/rubygems/archive/v${version}.tar.gz"
       relative_path "rubygems-#{version}"
     end
   end

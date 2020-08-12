@@ -101,7 +101,7 @@ commands:
             curl -Lo /tmp/python.tgz https://www.python.org/ftp/python/<< parameters.version >>/Python-<< parameters.version >>.tgz
             tar -C /tmp -zxf /tmp/python.tgz
             cd /tmp/Python-<< parameters.version >>
-            ./configure --prefix=/opt/python --with-ssl
+            ./configure --prefix=/opt/python --with-ssl --enable-optimizations
             make
             make install
       - save_cache:
