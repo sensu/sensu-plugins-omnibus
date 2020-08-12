@@ -47,7 +47,7 @@ if version && !source
 
   known_tarballs.each do |version, md5|
     self.version version do
-      source md5: md5, url: "https://github.com/rubygems/rubygems/archive/v${version}.tar.gz"
+      source md5: md5, url: "https://github.com/rubygems/rubygems/archive/v#{version}.tar.gz"
       relative_path "rubygems-#{version}"
     end
   end
