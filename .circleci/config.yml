@@ -82,12 +82,13 @@ jobs:
             apt-get install -y ca-certificates
           fi
       - restore_cache:
-          key: omnibus-${PACKAGECLOUD_DISTROS}-v1
+          key: omnibus-${PACKAGECLOUD_DISTROS}-v2
       - run: ./docker-build.sh
       - save_cache:
-          key: omnibus-${PACKAGECLOUD_DISTROS}-v1
+          key: omnibus-${PACKAGECLOUD_DISTROS}-v2
           paths:
             - /opt/sensu-plugins-omnibus/local
+            - /usr/bin/sensu-install
       - aws-s3/sync:
           arguments: --acl public-read
           aws-access-key-id: ARTIFACT_KEY
