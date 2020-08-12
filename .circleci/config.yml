@@ -103,6 +103,7 @@ commands:
                 echo "python is already installed but it is the wrong version."
               fi
             fi
+            set -x
             pyenv install -v << parameters.version >>
       - run: pyenv global << parameters.version >>
       - save_cache:
