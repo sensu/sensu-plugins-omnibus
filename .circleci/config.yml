@@ -98,8 +98,7 @@ commands:
             rm -rf /opt/python/*
             curl -Lo /tmp/python.tgz https://www.python.org/ftp/python/<< parameters.version >>/Python-<< parameters.version >>.tgz
             tar -C /tmp -zxf /tmp/python.tgz
-            ls -l /tmp
-            cd /tmp/python
+            cd /tmp/Python-<< parameters.version >>
             ./configure --prefix=/opt/python
             make
             make install
