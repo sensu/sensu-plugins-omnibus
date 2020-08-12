@@ -76,10 +76,10 @@ commands:
       - run: |
           if [ "$PLATFORM" = "ubuntu" ]; then
             apt-get update
-            apt-get install -y ca-certificates curl git build-essential
+            apt-get install -y ca-certificates curl git build-essential zlib1g-dev
           elif [ "$PLATFORM" = "centos" ]; then
             yum -y groupinstall 'Development Tools'
-            yum -y install git
+            yum -y install git zlib-devel
           fi
       - restore_cache:
           key: python-<< parameters.version >>-${PACKAGECLOUD_DISTROS}-v2
