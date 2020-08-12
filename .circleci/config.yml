@@ -72,7 +72,7 @@ commands:
         type: string
         default: 3.8.5
     steps:
-      - run: echo 'export PATH="/opt/python/bin:$PATH"' >> $BASH_ENV
+      - run: echo 'export PATH="/opt/python/bin:$HOME/.local/bin:$PATH"' >> $BASH_ENV
       - run: |
           if [ "$PLATFORM" = "ubuntu" ]; then
             apt-get update
