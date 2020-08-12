@@ -216,6 +216,7 @@ build do
     # From RVM forum
     # https://github.com/wayneeseguin/rvm/commit/86766534fcc26f4582f23842a4d3789707ce6b96
     configure_command << "ac_cv_func_dl_iterate_phdr=no"
+    configure_command << "ac_cv_func_clock_gettime=no"
     configure_command << "--with-opt-dir=#{install_dir}/embedded"
   elsif windows?
     if version.satisfies?(">= 2.3")
