@@ -134,6 +134,7 @@ jobs:
       - checkout
       - run: ./docker-build.sh install_dependencies
       - run: ./docker-build.sh install_toolchain
+      - run: echo 'source /opt/sensu-plugins-omnibus/load-omnibus-toolchain.sh' >> $BASH_ENV
       - run: ./docker-build.sh configure_git
       - run: ./docker-build.sh setup_compiler_flags
       - run: ./docker-build.sh install_gem_dependencies

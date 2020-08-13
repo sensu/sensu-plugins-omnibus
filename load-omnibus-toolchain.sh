@@ -5,15 +5,15 @@ detected_os()
     platform="unknown"
     unamestr=`uname`
     if [ "$unamestr" = "AIX" ]; then
-	platform="aix"
+        platform="aix"
     elif [ "$unamestr" = "Darwin" ]; then
-	platform="mac"
+        platform="mac"
     elif [ "$unamestr" = "FreeBSD" ]; then
-	platform="freebsd"
+        platform="freebsd"
     elif [ "$unamestr" = "Linux" ]; then
-	platform="linux"
+        platform="linux"
     elif [ "$unamestr" = "SunOS" ]; then
-	platform="solaris"
+        platform="solaris"
     fi
     echo $platform
 }
@@ -40,7 +40,7 @@ echo "= Environment"
 echo "========================================"
 echo ""
 
-env -0 | sort -z | tr '\\0' '\\n'
+env -0 | sort -z | tr '\0' '\n'
 
 ###################################################################
 # Query tool versions
