@@ -73,6 +73,7 @@ commands:
       platform_version:
         type: string
     steps:
+      - run: mkdir -pv /opt/python/bin
       - when:
           condition:
             or:
@@ -81,8 +82,8 @@ commands:
           steps:
             - run: apt-get update
             - run: apt-get install -y ca-certificates curl git python3
-            - run: ln -s /usr/bin/python3 /opt/omnibus-toolchain/bin/python
-            - run: ln -s /usr/bin/pip3 /opt/omnibus-toolchain/bin/pip
+            - run: ln -s /usr/bin/python3 /opt/python/bin/python
+            - run: ln -s /usr/bin/pip3 /opt/python/bin/pip
       - when:
           condition:
             and:
@@ -93,8 +94,8 @@ commands:
           steps:
             - run: yum -y install epel-release
             - run: yum -y --disablerepo=* --enablerepo=epel install python34 python34-pip
-            - run: ln -s /usr/bin/python3.4 /opt/omnibus-toolchain/bin/python
-            - run: ln -s /usr/bin/pip3.4 /opt/omnibus-toolchain/bin/pip
+            - run: ln -s /usr/bin/python3.4 /opt/python/bin/python
+            - run: ln -s /usr/bin/pip3.4 /opt/python/bin/pip
       - when:
           condition:
             and:
@@ -105,8 +106,8 @@ commands:
           steps:
             - run: yum -y install epel-release
             - run: yum -y --disablerepo=* --enablerepo=epel install python34 python34-pip
-            - run: ln -s /usr/bin/python3.4 /opt/omnibus-toolchain/bin/python
-            - run: ln -s /usr/bin/pip3.4 /opt/omnibus-toolchain/bin/pip
+            - run: ln -s /usr/bin/python3.4 /opt/python/bin/python
+            - run: ln -s /usr/bin/pip3.4 /opt/python/bin/pip
       - when:
           condition:
             and:
@@ -114,8 +115,9 @@ commands:
               - equal: [<< parameters.platform_version >>, 8]
           steps:
             - run: yum -y install python38
-            - run: ln -s /usr/bin/python3 /opt/omnibus-toolchain/bin/python
-            - run: ln -s /usr/bin/pip3 /opt/omnibus-toolchain/bin/pip
+            - run: ln -s /usr/bin/python3 /opt/python/bin/python
+            - run: ln -s /usr/bin/pip3 /opt/python/bin/pip
+      - run: echo 'export PATH="/opt/python/bin:$PATH"' >> $BASH_ENV
   run_with_toolchain:
     parameters:
       command:
