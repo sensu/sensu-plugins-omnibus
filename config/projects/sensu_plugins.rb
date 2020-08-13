@@ -34,7 +34,7 @@ if ENV.key?("KERNEL_ARCH")
 end
 
 override "ruby", version: "2.4.10"
-override "rubygems", version: "2.7.10"
+override "rubygems", version: "2.6.14"
 override "sensu-install", version: "0.1.0"
 
 package :deb do
