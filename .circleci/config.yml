@@ -140,7 +140,7 @@ jobs:
       - run: ./docker-build.sh install_gem_dependencies
       - restore_cache:
           key: omnibus-<< parameters.platform >>-<< parameters.platform_version>>-<< parameters.arch >>-v2
-      - run: ./docker-build.sh
+      - run: ./docker-build.sh build_project
       - save_cache:
           key: omnibus-<< parameters.platform >>-<< parameters.platform_version>>-<< parameters.arch >>-v2
           paths:
