@@ -40,25 +40,25 @@ executors:
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: debian/buster
-  ubuntu-1404:
+  ubuntu-trusty:
     docker:
       - image: ubuntu:14.04
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: ubuntu/trusty
-  ubuntu-1604:
+  ubuntu-xenial:
     docker:
       - image: ubuntu:16.04
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: ubuntu/quantal
-  ubuntu-1804:
+  ubuntu-bionic:
     docker:
       - image: ubuntu:18.04
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: ubuntu/bionic
-  ubuntu-2004:
+  ubuntu-focal:
     docker:
       - image: ubuntu:20.04
     environment:
@@ -68,56 +68,63 @@ executors:
 commands:
   install_python:
     parameters:
-      executor:
+      platform:
         type: string
-      version:
+      platform_version:
         type: string
-        default: 3.8.5
     steps:
-      - run: echo 'export PATH="/opt/python/bin:$HOME/.local/bin:$PATH"' >> $BASH_ENV
-      - run: |
-          if [ "$PLATFORM" = "ubuntu" ]; then
-            apt-get update
-            apt-get install -y ca-certificates curl git build-essential zlib1g-dev libssl-dev libffi-dev
-          elif [ "$PLATFORM" = "centos" ]; then
-            yum -y groupinstall 'Development Tools'
-            yum -y install git zlib-devel openssl-devel libffi-devel
-          fi
-      - restore_cache:
-          key: python-<< parameters.version >>-<< parameters.executor >>-v4
-      - run:
-          name: Install Python << parameters.version >>
-          command: |
-            if which python; then
-              if python -V | grep "<< parameters.version >>"; then
-                echo "python << parameters.version >> is already installed."
-                exit 0
-              else
-                echo "python is already installed but it is the wrong version."
-              fi
-            fi
-
-            echo "python not found - installing."
-            rm -rf /opt/python/*
-            curl -Lo /tmp/python.tgz https://www.python.org/ftp/python/<< parameters.version >>/Python-<< parameters.version >>.tgz
-            tar -C /tmp -zxf /tmp/python.tgz
-            cd /tmp/Python-<< parameters.version >>
-            ./configure --prefix=/opt/python
-            make
-            make install
-            ln -s /opt/python/bin/python3.8 /opt/python/bin/python
-            ln -s /opt/python/bin/pip /opt/python/bin/pip
-      - save_cache:
-          key: python-<< parameters.version >>-<< parameters.executor >>-v4
-          paths:
-            - /opt/python
+      - when:
+          condition:
+            or:
+              - equal: [<< parameters.platform >>, ubuntu]
+              - equal: [<< parameters.platform >>, debian]
+          steps:
+            - run: apt-get update
+            - run: apt-get install -y ca-certificates curl git python3
+            - run: ln -s /usr/bin/python3 /opt/omnibus-toolchain/bin/python
+            - run: ln -s /usr/bin/pip3 /opt/omnibus-toolchain/bin/pip
+      - when:
+          condition:
+            and:
+              - equal: [<< parameters.platform >>, centos]
+              - or:
+                  - equal: [<< parameters.platform_version >>, 6]
+                  - equal: [<< parameters.platform_version >>, 7]
+          steps:
+            - run: yum -y install epel-release
+            - run: yum -y --disablerepo=* --enablerepo=epel install python34 python34-pip
+            - run: ln -s /usr/bin/python3.4 /opt/omnibus-toolchain/bin/python
+            - run: ln -s /usr/bin/pip3.4 /opt/omnibus-toolchain/bin/pip
+      - when:
+          condition:
+            and:
+              - equal: [<< parameters.platform >>, centos]
+              - or:
+                  - equal: [<< parameters.platform_version >>, 6]
+                  - equal: [<< parameters.platform_version >>, 7]
+          steps:
+            - run: yum -y install epel-release
+            - run: yum -y --disablerepo=* --enablerepo=epel install python34 python34-pip
+            - run: ln -s /usr/bin/python3.4 /opt/omnibus-toolchain/bin/python
+            - run: ln -s /usr/bin/pip3.4 /opt/omnibus-toolchain/bin/pip
+      - when:
+          condition:
+            and:
+              - equal: [<< parameters.platform >>, centos]
+              - equal: [<< parameters.platform_version >>, 8]
+          steps:
+            - run: yum -y install python38
+            - run: ln -s /usr/bin/python3 /opt/omnibus-toolchain/bin/python
+            - run: ln -s /usr/bin/pip3 /opt/omnibus-toolchain/bin/pip
 
 jobs:
   build:
-    executor: << parameters.executor >>
+    executor: << parameters.platform >>-<< parameters.platform_version >>
     working_directory: /opt/sensu-plugins-omnibus
     parameters:
-      executor:
+      platform:
+        type: string
+      platform_version:
         type: string
       arch:
         type: string
@@ -125,16 +132,22 @@ jobs:
       KERNEL_ARCH: << parameters.arch >>
     steps:
       - checkout
-      - install_python:
-          executor: << parameters.executor >>
+      - run: ./docker-build.sh install_dependencies
+      - run: ./docker-build.sh install_toolchain
+      - run: ./docker-build.sh configure_git
+      - run: ./docker-build.sh setup_compiler_flags
+      - run: ./docker-build.sh install_gem_dependencies
       - restore_cache:
-          key: omnibus-<< parameters.executor >>-<< parameters.arch >>-v2
+          key: omnibus-<< parameters.platform >>-<< parameters.platform_version>>-<< parameters.arch >>-v2
       - run: ./docker-build.sh
       - save_cache:
-          key: omnibus-<< parameters.executor >>-<< parameters.arch >>-v2
+          key: omnibus-<< parameters.platform >>-<< parameters.platform_version>>-<< parameters.arch >>-v2
           paths:
             - /opt/sensu-plugins-omnibus/local
             - /usr/bin/sensu-install
+      - install_python:
+          platform: << parameters.platform >>
+          platform_version: << parameters.platform_version >>
       - aws-s3/sync:
           arguments: --acl public-read
           aws-access-key-id: ARTIFACTS_KEY
@@ -148,61 +161,71 @@ workflows:
     jobs:
       - build:
           name: centos-6-<< matrix.arch >>
-          executor: centos-6
+          platform: centos
+          platform_version: "6"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: centos-7-<< matrix.arch >>
-          executor: centos-7
+          platform: centos
+          platform_version: "7"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: centos-8-<< matrix.arch >>
-          executor: centos-8
+          platform: centos
+          platform_version: "8"
           matrix:
             parameters:
               arch: [ x86_64 ]
       - build:
           name: debian-8-<< matrix.arch >>
-          executor: debian-8
+          platform: debian
+          platform_version: "8"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: debian-9-<< matrix.arch >>
-          executor: debian-9
+          platform: debian
+          platform_version: "9"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: debian-10-<< matrix.arch >>
-          executor: debian-10
+          platform: debian
+          platform_version: "10"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-1404-<< matrix.arch >>
-          executor: ubuntu-1404
+          platform: ubuntu
+          platform_version: "trusty"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-1604-<< matrix.arch >>
-          executor: ubuntu-1604
+          platform: ubuntu
+          platform_version: "xenial"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-1804-<< matrix.arch >>
-          executor: ubuntu-1804
+          platform: ubuntu
+          platform_version: "bionic"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-2004-<< matrix.arch >>
-          executor: ubuntu-2004
+          platform: ubuntu
+          platform_version: "focal"
           matrix:
             parameters:
-              arch: [ i386, x86_64 ]
+              arch: [ x86_64 ]

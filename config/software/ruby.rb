@@ -229,8 +229,6 @@ build do
     configure_command << "--with-opt-dir=#{install_dir}/embedded"
   end
 
-  configure_command << "ac_cv_func_clock_gettime=no"
-
   # FFS: works around a bug that infects AIX when it picks up our pkg-config
   # AFAIK, ruby does not need or use this pkg-config it just causes the build to fail.
   # The alternative would be to patch configure to remove all the pkg-config garbage entirely

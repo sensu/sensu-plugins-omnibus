@@ -82,22 +82,47 @@ build_project() {
 }
 
 publish_packages() {
-    echo "Publishing packages"
-    cd /opt/sensu-plugins-omnibus
-    if [ "$PLATFORM" = "ubuntu" ]; then
-        bundle exec omnibus publish packagecloud $PACKAGECLOUD_REPO pkg/*.deb
-    elif [ "$PLATFORM" = "centos" ]; then
-        bundle exec omnibus publish packagecloud $PACKAGECLOUD_REPO pkg/*.rpm
+    if [ "x$CIRCLE_TAG" != "x" ]; then
+        echo "Publishing packages"
+        cd /opt/sensu-plugins-omnibus
+        if [ "$PLATFORM" = "ubuntu" ]; then
+            bundle exec omnibus publish packagecloud $PACKAGECLOUD_REPO pkg/*.deb
+        elif [ "$PLATFORM" = "centos" ]; then
+            bundle exec omnibus publish packagecloud $PACKAGECLOUD_REPO pkg/*.rpm
+        fi
+    else
+        echo "CIRCLE_TAG not set, skipping publishing"
     fi
 }
 
-install_dependencies
-install_toolchain
-configure_git
-setup_compiler_flags
-install_gem_dependencies
-build_project
-
-if [ "x$CIRCLE_TAG" != "x" ]; then
-    publish_packages
-fi
+case "$1" in
+    install_dependencies)
+        install_dependencies
+        ;;
+    install_toolchain)
+        install_toolchain
+        ;;
+    configure_git)
+        configure_git
+        ;;
+    setup_compiler_flags)
+        setup_compiler_flags
+        ;;
+    install_gem_dependencies)
+        install_gem_dependencies
+        ;;
+    build_project)
+        build_project
+        ;;
+    publish_packages)
+        publish_packages
+        ;;
+    *)
+        install_dependencies
+        install_toolchain
+        configure_git
+        setup_compiler_flags
+        install_gem_dependencies
+        build_project
+        ;;
+esac
