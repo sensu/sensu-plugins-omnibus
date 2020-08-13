@@ -74,11 +74,13 @@ commands:
         type: string
     steps:
       - run: mkdir -pv /opt/python/bin
+      - run: echo "<< parameters.platform >>"
+      - run: echo "<< parameters.platform_version >>"
       - when:
           condition:
             or:
-              - equal: [<< parameters.platform >>, ubuntu]
-              - equal: [<< parameters.platform >>, debian]
+              - equal: [<< parameters.platform >>, "ubuntu"]
+              - equal: [<< parameters.platform >>, "debian"]
           steps:
             - run: apt-get update
             - run: apt-get install -y ca-certificates curl git python3
@@ -87,10 +89,10 @@ commands:
       - when:
           condition:
             and:
-              - equal: [<< parameters.platform >>, centos]
+              - equal: [<< parameters.platform >>, "centos"]
               - or:
-                  - equal: [<< parameters.platform_version >>, 6]
-                  - equal: [<< parameters.platform_version >>, 7]
+                  - equal: [<< parameters.platform_version >>, "6"]
+                  - equal: [<< parameters.platform_version >>, "7"]
           steps:
             - run: yum -y install epel-release
             - run: yum -y --disablerepo=* --enablerepo=epel install python34 python34-pip
@@ -99,10 +101,10 @@ commands:
       - when:
           condition:
             and:
-              - equal: [<< parameters.platform >>, centos]
+              - equal: [<< parameters.platform >>, "centos"]
               - or:
-                  - equal: [<< parameters.platform_version >>, 6]
-                  - equal: [<< parameters.platform_version >>, 7]
+                  - equal: [<< parameters.platform_version >>, "6"]
+                  - equal: [<< parameters.platform_version >>, "7"]
           steps:
             - run: yum -y install epel-release
             - run: yum -y --disablerepo=* --enablerepo=epel install python34 python34-pip
@@ -111,8 +113,8 @@ commands:
       - when:
           condition:
             and:
-              - equal: [<< parameters.platform >>, centos]
-              - equal: [<< parameters.platform_version >>, 8]
+              - equal: [<< parameters.platform >>, "centos"]
+              - equal: [<< parameters.platform_version >>, "8"]
           steps:
             - run: yum -y install python38
             - run: ln -s /usr/bin/python3 /opt/python/bin/python
