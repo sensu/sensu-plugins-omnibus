@@ -116,6 +116,12 @@ commands:
             - run: yum -y install python38
             - run: ln -s /usr/bin/python3 /opt/omnibus-toolchain/bin/python
             - run: ln -s /usr/bin/pip3 /opt/omnibus-toolchain/bin/pip
+  run_with_toolchain:
+    parameters:
+      command:
+        type: string
+    steps:
+      - run: source load-omnibus-toolchain.sh && << parameters.command >>  
 
 jobs:
   build:
@@ -134,13 +140,16 @@ jobs:
       - checkout
       - run: ./docker-build.sh install_dependencies
       - run: ./docker-build.sh install_toolchain
-      - run: echo 'source /opt/sensu-plugins-omnibus/load-omnibus-toolchain.sh' >> $BASH_ENV
-      - run: ./docker-build.sh configure_git
-      - run: ./docker-build.sh setup_compiler_flags
-      - run: ./docker-build.sh install_gem_dependencies
+      - run_with_toolchain:
+          command: ./docker-build.sh configure_git
+      - run_with_toolchain:
+          command: ./docker-build.sh setup_compiler_flags_bash_env
+      - run_with_toolchain:
+          command: ./docker-build.sh install_gem_dependencies
       - restore_cache:
           key: omnibus-<< parameters.platform >>-<< parameters.platform_version>>-<< parameters.arch >>-v2
-      - run: ./docker-build.sh build_project
+      - run_with_toolchain:
+          command: ./docker-build.sh build_project
       - save_cache:
           key: omnibus-<< parameters.platform >>-<< parameters.platform_version>>-<< parameters.arch >>-v2
           paths:
