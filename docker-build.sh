@@ -7,13 +7,13 @@ install_dependencies() {
 
     if [ "$PLATFORM" = "ubuntu" ]; then
         apt-get update
-        apt-get install -y build-essential curl fakeroot tar git
+        apt-get install -y build-essential curl fakeroot tar git which unzip
 
         if [ "$KERNEL_ARCH" = "i386" ]; then
             apt-get install -y gcc-multilib g++-multilib
         fi
     elif [ "$PLATFORM" = "centos" ]; then
-        yum -y install perl rpm-build make automake gcc gcc-c++ util-linux-ng git
+        yum -y install perl rpm-build make automake gcc gcc-c++ util-linux-ng git which unzip
 
         if [ "$KERNEL_ARCH" = "i386" ]; then
             yum -y install glibc-devel.i686 libgcc.i686 libstdc++-devel.i686 ncurses-devel.i686
