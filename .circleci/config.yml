@@ -155,7 +155,7 @@ jobs:
           aws-region: ARTIFACTS_REGION
           from: pkg
           to: "s3://${ARTIFACTS_BUCKET}/$(date +'%Y-%m-%d_%T')_${CIRCLE_WORKFLOW_ID}"
-      
+
 workflows:
   build:
     jobs:
