@@ -7,7 +7,7 @@ install_dependencies() {
 
     if [ "$PLATFORM" = "ubuntu" ]; then
         apt-get update
-        apt-get install -y build-essential curl fakeroot tar git which unzip
+        apt-get install -y build-essential curl fakeroot tar git unzip
 
         if [ "$KERNEL_ARCH" = "i386" ]; then
             apt-get install -y gcc-multilib g++-multilib
