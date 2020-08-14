@@ -83,9 +83,16 @@ commands:
               - equal: [<< parameters.platform >>, "debian"]
           steps:
             - run: apt-get update
-            - run: apt-get install -y ca-certificates curl git python3 python3-venv
+            - run: apt-get install -y ca-certificates curl git python3
             - run: ln -s /usr/bin/python3 /opt/python/bin/python
             - run: ln -s /usr/bin/pip3 /opt/python/bin/pip
+      - unless:
+          condition:
+            and:
+              - equal: [<< parameters.platform >>, "ubuntu"]
+              - equal: [<< parameters.platform_version, "trusty"]
+          steps:
+            - run: apt-get install python3-venv
       - when:
           condition:
             and:
