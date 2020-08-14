@@ -163,6 +163,7 @@ jobs:
           paths:
             - /opt/sensu-plugins-omnibus/local
             - /usr/bin/sensu-install
+            - /opt/sensu-plugins-ruby
       - install_python:
           platform: << parameters.platform >>
           platform_version: << parameters.platform_version >>
