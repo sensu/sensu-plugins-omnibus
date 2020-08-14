@@ -84,7 +84,7 @@ commands:
             - run: apt-get install -y ca-certificates curl git python3
             - run: ln -s /usr/bin/python3 /opt/python/bin/python
             - run: ln -s /usr/bin/pip3 /opt/python/bin/pip
-      - if:
+      - when:
           condition:
             and:
               - or:
