@@ -191,6 +191,9 @@ workflows:
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
+          filters:
+            tags:
+              only: /.*/
       - build:
           name: centos-7-<< matrix.arch >>
           platform: centos
@@ -198,6 +201,9 @@ workflows:
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
+          filters:
+            tags:
+              only: /.*/
       - build:
           name: centos-8-<< matrix.arch >>
           platform: centos
@@ -205,6 +211,9 @@ workflows:
           matrix:
             parameters:
               arch: [ x86_64 ]
+          filters:
+            tags:
+              only: /.*/
       - build:
           name: debian-8-<< matrix.arch >>
           platform: debian
@@ -212,6 +221,9 @@ workflows:
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
+          filters:
+            tags:
+              only: /.*/
       - build:
           name: debian-9-<< matrix.arch >>
           platform: debian
@@ -219,6 +231,9 @@ workflows:
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
+          filters:
+            tags:
+              only: /.*/
       - build:
           name: debian-10-<< matrix.arch >>
           platform: debian
@@ -226,6 +241,9 @@ workflows:
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
+          filters:
+            tags:
+              only: /.*/
       - build:
           name: ubuntu-1404-<< matrix.arch >>
           platform: ubuntu
@@ -233,6 +251,9 @@ workflows:
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
+          filters:
+            tags:
+              only: /.*/
       - build:
           name: ubuntu-1604-<< matrix.arch >>
           platform: ubuntu
@@ -240,6 +261,9 @@ workflows:
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
+          filters:
+            tags:
+              only: /.*/
       - build:
           name: ubuntu-1804-<< matrix.arch >>
           platform: ubuntu
@@ -247,6 +271,9 @@ workflows:
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
+          filters:
+            tags:
+              only: /.*/
       - build:
           name: ubuntu-2004-<< matrix.arch >>
           platform: ubuntu
@@ -254,3 +281,6 @@ workflows:
           matrix:
             parameters:
               arch: [ x86_64 ]
+          filters:
+            tags:
+              only: /.*/
