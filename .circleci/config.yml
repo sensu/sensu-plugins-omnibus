@@ -144,6 +144,7 @@ jobs:
         type: string
     environment:
       KERNEL_ARCH: << parameters.arch >>
+      PACKAGECLOUD_REPO: "sensu/community"
     steps:
       - checkout
       - run: ./docker-build.sh install_dependencies
