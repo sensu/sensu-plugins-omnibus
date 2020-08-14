@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  aws-s3: circleci/aws-s3@1.0.16
+
 executors:
   centos-6:
     docker:
@@ -37,104 +40,220 @@ executors:
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: debian/buster
-  ubuntu-1404:
+  ubuntu-trusty:
     docker:
       - image: ubuntu:14.04
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: ubuntu/trusty
-  ubuntu-1604:
+  ubuntu-xenial:
     docker:
       - image: ubuntu:16.04
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: ubuntu/quantal
-  ubuntu-1804:
+  ubuntu-bionic:
     docker:
       - image: ubuntu:18.04
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: ubuntu/bionic
-  ubuntu-2004:
+  ubuntu-focal:
     docker:
       - image: ubuntu:20.04
     environment:
       PLATFORM: ubuntu
       PACKAGECLOUD_DISTROS: ubuntu/focal
 
+commands:
+  install_python:
+    parameters:
+      platform:
+        type: string
+      platform_version:
+        type: string
+    steps:
+      - run: mkdir -pv /opt/python/bin
+      - when:
+          condition:
+            or:
+              - equal: [<< parameters.platform >>, "ubuntu"]
+              - equal: [<< parameters.platform >>, "debian"]
+          steps:
+            - run: apt-get update
+            - run: apt-get install -y ca-certificates curl git python3
+            - run: ln -s /usr/bin/python3 /opt/python/bin/python
+            - run: ln -s /usr/bin/pip3 /opt/python/bin/pip
+      - when:
+          condition:
+            and:
+              - equal: [<< parameters.platform >>, "ubuntu"]
+              - equal: [<< parameters.platform_version >>, "trusty"]
+          steps:
+            - run: ln -s /usr/bin/python3 /usr/bin/python
+            - run: ln -s /usr/bin/pip3 /usr/bin/pip
+      - when:
+          condition:
+            and:
+              - or:
+                  - equal: [<< parameters.platform >>, "ubuntu"]
+                  - equal: [<< parameters.platform >>, "debian"]
+              - not:
+                  equal: [<< parameters.platform_version >>, "trusty"]
+          steps:
+            - run: apt-get install -y python3-venv
+      - when:
+          condition:
+            and:
+              - equal: [<< parameters.platform >>, "centos"]
+              - or:
+                  - equal: [<< parameters.platform_version >>, "6"]
+                  - equal: [<< parameters.platform_version >>, "7"]
+          steps:
+            - run: yum -y install epel-release
+            - run: yum -y --disablerepo=* --enablerepo=epel install python34 python34-pip
+            - run: ln -s /usr/bin/python3.4 /opt/python/bin/python
+            - run: ln -s /usr/bin/pip3.4 /opt/python/bin/pip
+      - when:
+          condition:
+            and:
+              - equal: [<< parameters.platform >>, "centos"]
+              - equal: [<< parameters.platform_version >>, "8"]
+          steps:
+            - run: yum -y install python38
+            - run: ln -s /usr/bin/python3 /opt/python/bin/python
+            - run: ln -s /usr/bin/pip3 /opt/python/bin/pip
+      - run: echo 'export PATH="/opt/python/bin:$PATH"' >> $BASH_ENV
+  run_with_toolchain:
+    parameters:
+      command:
+        type: string
+    steps:
+      - run: source load-omnibus-toolchain.sh && << parameters.command >>  
+
 jobs:
   build:
-    executor: << parameters.executor >>
+    executor: << parameters.platform >>-<< parameters.platform_version >>
     working_directory: /opt/sensu-plugins-omnibus
     parameters:
-      executor:
+      platform:
+        type: string
+      platform_version:
         type: string
       arch:
         type: string
+    environment:
+      KERNEL_ARCH: << parameters.arch >>
     steps:
       - checkout
-      - run: ./docker-build.sh
-      
+      - run: ./docker-build.sh install_dependencies
+      - run: ./docker-build.sh install_toolchain
+      - run_with_toolchain:
+          command: ./docker-build.sh configure_git
+      - run_with_toolchain:
+          command: ./docker-build.sh setup_compiler_flags_bash_env
+      - run_with_toolchain:
+          command: ./docker-build.sh install_gem_dependencies
+      - restore_cache:
+          key: omnibus-<< parameters.platform >>-<< parameters.platform_version>>-<< parameters.arch >>-v2
+      - run_with_toolchain:
+          command: ./docker-build.sh build_project
+      - save_cache:
+          key: omnibus-<< parameters.platform >>-<< parameters.platform_version>>-<< parameters.arch >>-v2
+          paths:
+            - /opt/sensu-plugins-omnibus/local
+            - /usr/bin/sensu-install
+      - install_python:
+          platform: << parameters.platform >>
+          platform_version: << parameters.platform_version >>
+      - run: echo 'export PATH="$HOME/.local/bin:$HOME/bin:$PATH"' >> $BASH_ENV
+      - run: echo 'export COMMIT_DATE=$(git log -1 --format="%ci" HEAD | tr " " "_")' >> $BASH_ENV
+      - run: env
+      - run: ls -l /opt/python/bin
+      - run: ls -l /usr/bin | grep python
+      - unless:
+          condition:
+            equal: [<< pipeline.git.tag >>, ""]
+          steps:
+            - aws-s3/sync:
+                arguments: --acl public-read
+                aws-access-key-id: ARTIFACTS_KEY
+                aws-secret-access-key: ARTIFACTS_SECRET
+                aws-region: ARTIFACTS_REGION
+                from: pkg
+                to: "s3://${ARTIFACTS_BUCKET}/${COMMIT_DATE}_${CIRCLE_WORKFLOW_ID}/<< parameters.platform >>-<< parameters.platform_version >>-<< parameters.arch >>"
+            - run: ./docker-build.sh publish_packages
+
 workflows:
   build:
     jobs:
       - build:
           name: centos-6-<< matrix.arch >>
-          executor: centos-6
+          platform: centos
+          platform_version: "6"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: centos-7-<< matrix.arch >>
-          executor: centos-7
+          platform: centos
+          platform_version: "7"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: centos-8-<< matrix.arch >>
-          executor: centos-8
+          platform: centos
+          platform_version: "8"
           matrix:
             parameters:
               arch: [ x86_64 ]
       - build:
           name: debian-8-<< matrix.arch >>
-          executor: debian-8
+          platform: debian
+          platform_version: "8"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: debian-9-<< matrix.arch >>
-          executor: debian-9
+          platform: debian
+          platform_version: "9"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: debian-10-<< matrix.arch >>
-          executor: debian-10
+          platform: debian
+          platform_version: "10"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-1404-<< matrix.arch >>
-          executor: ubuntu-1404
+          platform: ubuntu
+          platform_version: "trusty"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-1604-<< matrix.arch >>
-          executor: ubuntu-1604
+          platform: ubuntu
+          platform_version: "xenial"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-1804-<< matrix.arch >>
-          executor: ubuntu-1804
+          platform: ubuntu
+          platform_version: "bionic"
           matrix:
             parameters:
               arch: [ i386, x86_64 ]
       - build:
           name: ubuntu-2004-<< matrix.arch >>
-          executor: ubuntu-2004
+          platform: ubuntu
+          platform_version: "focal"
           matrix:
             parameters:
-              arch: [ i386, x86_64 ]
+              arch: [ x86_64 ]
