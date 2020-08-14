@@ -90,7 +90,7 @@ commands:
           condition:
             and:
               - equal: [<< parameters.platform >>, "ubuntu"]
-              - equal: [<< parameters.platform_version, "trusty"]
+              - equal: [<< parameters.platform_version >>, "trusty"]
           steps:
             - run: apt-get install python3-venv
       - when:
