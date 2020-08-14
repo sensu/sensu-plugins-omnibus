@@ -151,7 +151,7 @@ jobs:
           platform: << parameters.platform >>
           platform_version: << parameters.platform_version >>
       - run: echo 'export PATH="$HOME/.local/bin:$HOME/bin:$PATH"' >> $BASH_ENV
-      - run: echo 'export COMMIT_DATE=$(git log -1 --format=\'%ci\' HEAD | tr \' \' \'_\')' >> $BASH_ENV
+      - run: echo 'export COMMIT_DATE=$(git log -1 --format="%ci" HEAD | tr " " "_")' >> $BASH_ENV
       - aws-s3/sync:
           arguments: --acl public-read
           aws-access-key-id: ARTIFACTS_KEY
