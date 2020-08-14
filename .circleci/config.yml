@@ -178,7 +178,8 @@ jobs:
                 aws-region: ARTIFACTS_REGION
                 from: pkg
                 to: "s3://${ARTIFACTS_BUCKET}/${COMMIT_DATE}_${CIRCLE_WORKFLOW_ID}/<< parameters.platform >>-<< parameters.platform_version >>-<< parameters.arch >>"
-            - run: ./docker-build.sh publish_packages
+            - run_with_toolchain:
+                command: ./docker-build.sh publish_packages
 
 workflows:
   build:
