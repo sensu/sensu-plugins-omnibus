@@ -171,9 +171,8 @@ jobs:
       - run: env
       - run: ls -l /opt/python/bin
       - run: ls -l /usr/bin | grep python
-      - unless:
-          condition:
-            equal: [<< pipeline.git.tag >>, ""]
+      - when:
+          condition: << pipeline.git.tag >>
           steps:
             - aws-s3/sync:
                 arguments: --acl public-read
