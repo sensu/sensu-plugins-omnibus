@@ -74,8 +74,6 @@ commands:
         type: string
     steps:
       - run: mkdir -pv /opt/python/bin
-      - run: echo "<< parameters.platform >>"
-      - run: echo "<< parameters.platform_version >>"
       - when:
           condition:
             or:
@@ -86,11 +84,14 @@ commands:
             - run: apt-get install -y ca-certificates curl git python3
             - run: ln -s /usr/bin/python3 /opt/python/bin/python
             - run: ln -s /usr/bin/pip3 /opt/python/bin/pip
-      - unless:
+      - if:
           condition:
             and:
-              - equal: [<< parameters.platform >>, "ubuntu"]
-              - equal: [<< parameters.platform_version >>, "trusty"]
+              - or:
+                  - equal: [<< parameters.platform >>, "ubuntu"]
+                  - equal: [<< parameters.platform >>, "debian"]
+              - not:
+                  equal: [<< parameters.platform_version >>, "trusty"]
           steps:
             - run: apt-get install -y python3-venv
       - when:
@@ -159,6 +160,7 @@ jobs:
           platform_version: << parameters.platform_version >>
       - run: echo 'export PATH="$HOME/.local/bin:$HOME/bin:$PATH"' >> $BASH_ENV
       - run: echo 'export COMMIT_DATE=$(git log -1 --format="%ci" HEAD | tr " " "_")' >> $BASH_ENV
+      - run: env
       - aws-s3/sync:
           arguments: --acl public-read
           aws-access-key-id: ARTIFACTS_KEY
