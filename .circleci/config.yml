@@ -171,13 +171,18 @@ jobs:
       - run: env
       - run: ls -l /opt/python/bin
       - run: ls -l /usr/bin | grep python
-      - aws-s3/sync:
-          arguments: --acl public-read
-          aws-access-key-id: ARTIFACTS_KEY
-          aws-secret-access-key: ARTIFACTS_SECRET
-          aws-region: ARTIFACTS_REGION
-          from: pkg
-          to: "s3://${ARTIFACTS_BUCKET}/${COMMIT_DATE}_${CIRCLE_WORKFLOW_ID}/<< parameters.platform >>-<< parameters.platform_version >>-<< parameters.arch >>"
+      - unless:
+          condition:
+            equal: [<< pipeline.git.tag >>, ""]
+          steps:
+            - aws-s3/sync:
+                arguments: --acl public-read
+                aws-access-key-id: ARTIFACTS_KEY
+                aws-secret-access-key: ARTIFACTS_SECRET
+                aws-region: ARTIFACTS_REGION
+                from: pkg
+                to: "s3://${ARTIFACTS_BUCKET}/${COMMIT_DATE}_${CIRCLE_WORKFLOW_ID}/<< parameters.platform >>-<< parameters.platform_version >>-<< parameters.arch >>"
+            - run: ./docker-build.sh publish_packages
 
 workflows:
   build:
