@@ -1,4 +1,5 @@
 name "winsw-net2"
+skip_transitive_dependency_licensing true
 default_version "2.0.2"
 
 source url: "https://github.com/kohsuke/winsw/releases/download/winsw-v#{version}/WinSW.NET2.exe"

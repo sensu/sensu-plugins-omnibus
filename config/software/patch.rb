@@ -15,6 +15,7 @@
 #
 
 name "patch"
+skip_transitive_dependency_licensing true
 
 if windows?
   # TODO more recent version now?

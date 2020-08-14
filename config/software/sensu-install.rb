@@ -1,4 +1,5 @@
 name "sensu-install"
+skip_transitive_dependency_licensing true
 default_version "0.1.0"
 
 dependency "ruby"

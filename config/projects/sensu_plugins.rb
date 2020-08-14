@@ -8,7 +8,6 @@ name "sensu-plugins-ruby"
 homepage "https://sensu.io"
 license "MIT"
 description "A monitoring framework that aims to be simple, malleable, and scalable."
-skip_transitive_dependency_licensing true
 
 if windows?
   maintainer "Sensu, Inc."

@@ -16,6 +16,8 @@
 
 name "cacerts"
 
+skip_transitive_dependency_licensing true
+
 default_version "2016.01.20"
 
 version "2016.01.20" do

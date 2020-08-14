@@ -15,6 +15,7 @@
 #
 
 name "util-macros"
+skip_transitive_dependency_licensing true
 default_version "1.18.0"
 
 version "1.19.0" do

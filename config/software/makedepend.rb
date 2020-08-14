@@ -15,6 +15,7 @@
 #
 
 name "makedepend"
+skip_transitive_dependency_licensing true
 default_version "1.0.5"
 
 license "MIT"

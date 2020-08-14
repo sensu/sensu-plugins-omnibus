@@ -30,6 +30,7 @@
 
 name "libgcc"
 description "On UNIX systems where we bootstrap a compiler, copy the libgcc"
+skip_transitive_dependency_licensing true
 default_version "0.0.1"
 
 build do

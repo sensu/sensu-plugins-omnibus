@@ -1,5 +1,7 @@
 name "eventmachine"
 
+skip_transitive_dependency_licensing true
+
 dependency "libstdc++"
 dependency "ruby"
 dependency "ruby-windows-devkit" if windows?

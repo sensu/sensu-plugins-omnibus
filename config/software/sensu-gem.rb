@@ -1,4 +1,5 @@
 name "sensu-gem"
+skip_transitive_dependency_licensing true
 default_version "0.26.1"
 
 dependency "ruby"

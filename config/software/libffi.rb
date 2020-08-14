@@ -16,6 +16,8 @@
 
 name "libffi"
 
+skip_transitive_dependency_licensing true
+
 default_version "3.2.1"
 
 license "MIT"

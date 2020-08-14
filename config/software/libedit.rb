@@ -17,6 +17,8 @@
 name "libedit"
 default_version "20120601-3.0"
 
+skip_transitive_dependency_licensing true
+
 dependency "ncurses"
 
 version("20150325-3.1") { source md5: "43cdb5df3061d78b5e9d59109871b4f6" }

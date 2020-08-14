@@ -16,6 +16,7 @@
 
 name "preparation"
 description "the steps required to preprare the build"
+skip_transitive_dependency_licensing true
 default_version '1.0.0'
 
 build do

@@ -1,4 +1,5 @@
 name "rubysl-readline-gem"
+skip_transitive_dependency_licensing true
 default_version "2.0.2"
 
 dependency "ruby"

@@ -16,6 +16,7 @@
 
 name "version-manifest"
 description "generates a version manifest file"
+skip_transitive_dependency_licensing true
 default_version "0.0.1"
 
 build do

@@ -15,6 +15,7 @@
 #
 
 name "xproto"
+skip_transitive_dependency_licensing true
 default_version "7.0.25"
 
 version "7.0.28" do

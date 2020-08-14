@@ -1,4 +1,5 @@
 name "rb-readline-gem"
+skip_transitive_dependency_licensing true
 default_version "0.5.3"
 
 dependency "ruby"

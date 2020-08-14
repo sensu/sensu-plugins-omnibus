@@ -15,6 +15,7 @@
 #
 
 name "ncurses"
+skip_transitive_dependency_licensing true
 default_version "5.9"
 
 dependency "libtool" if aix?
