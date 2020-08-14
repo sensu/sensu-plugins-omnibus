@@ -92,7 +92,7 @@ commands:
               - equal: [<< parameters.platform >>, "ubuntu"]
               - equal: [<< parameters.platform_version >>, "trusty"]
           steps:
-            - run: apt-get install python3-venv
+            - run: apt-get install -y python3-venv
       - when:
           condition:
             and:
