@@ -87,6 +87,14 @@ commands:
       - when:
           condition:
             and:
+              - equal: [<< parameters.platform >>, "ubuntu"]
+              - equal: [<< parameters.platform_version >>, "trusty"]
+          steps:
+            - run: ln -s /usr/bin/python3 /usr/bin/python
+            - run: ln -s /usr/bin/pip3 /usr/bin/pip
+      - when:
+          condition:
+            and:
               - or:
                   - equal: [<< parameters.platform >>, "ubuntu"]
                   - equal: [<< parameters.platform >>, "debian"]
