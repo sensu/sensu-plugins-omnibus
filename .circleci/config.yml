@@ -168,9 +168,6 @@ jobs:
           platform_version: << parameters.platform_version >>
       - run: echo 'export PATH="$HOME/.local/bin:$HOME/bin:$PATH"' >> $BASH_ENV
       - run: echo 'export COMMIT_DATE=$(git log -1 --format="%ci" HEAD | tr " " "_")' >> $BASH_ENV
-      - run: env
-      - run: ls -l /opt/python/bin
-      - run: ls -l /usr/bin | grep python
       - when:
           condition: << pipeline.git.tag >>
           steps:
