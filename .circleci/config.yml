@@ -150,14 +150,15 @@ jobs:
       - install_python:
           platform: << parameters.platform >>
           platform_version: << parameters.platform_version >>
-      - run: echo 'export PATH="$HOME/.local/bin:$PATH"' >> $BASH_ENV
+      - run: echo 'export PATH="$HOME/.local/bin:$HOME/bin:$PATH"' >> $BASH_ENV
+      - run: echo 'export COMMIT_DATE=$(git log -1 --format=\'%ci\' HEAD | tr \' \' \'_\')' >> $BASH_ENV
       - aws-s3/sync:
           arguments: --acl public-read
           aws-access-key-id: ARTIFACTS_KEY
           aws-secret-access-key: ARTIFACTS_SECRET
           aws-region: ARTIFACTS_REGION
           from: pkg
-          to: "s3://${ARTIFACTS_BUCKET}/$(date +'%Y-%m-%d_%T')_${CIRCLE_WORKFLOW_ID}"
+          to: "s3://${ARTIFACTS_BUCKET}/${COMMIT_DATE}_${CIRCLE_WORKFLOW_ID}/<< parameters.platform >>-<< parameters.platform_version >>-<< parameters.arch >>"
 
 workflows:
   build:
